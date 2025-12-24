@@ -1,64 +1,89 @@
 # IPL Win Probability Predictor
 
-This project predicts the win probability of the batting team during the second innings of an IPL match using ball-by-ball data.
+This project predicts the win probability of the batting team during the second innings of an IPL match based on the current match situation.
 
-The goal of the project is to demonstrate an end-to-end machine learning workflow — from raw data processing and feature engineering to model training and deployment using a web interface.
+It demonstrates a complete end-to-end machine learning workflow, starting from raw IPL ball-by-ball data to a deployed interactive web application.
 
-# Project Overview
+Project Overview
 
-Built using historical IPL match and delivery data
+Uses historical IPL match and delivery data
 
-Focuses on second innings chases, where the target is known
+Focuses on second-innings chases where the target score is known
 
-Calculates match-state features such as:
+Generates match-state features such as:
 
 Runs left
 
-Balls left
+Balls remaining
 
-Wickets remaining
+Wickets in hand
 
 Current Run Rate (CRR)
 
 Required Run Rate (RRR)
 
-Uses a Logistic Regression model to estimate win probability
+Trains a Logistic Regression model to estimate win probability
 
-Deployed as an interactive Streamlit application
+Deploys the trained model using a Streamlit web interface
+
+Includes visualizations for better interpretation of predictions
 
 # Approach
+# Feature Engineering
 
-Feature Engineering
+Merged match-level and ball-by-ball datasets
 
-Merged match-level and ball-by-ball data
+Filtered inconsistent and DLS-affected matches
 
-Computed real-time match state features at each ball
+Computed real-time match features for each delivery
 
-Removed DLS-affected and inconsistent matches
+Created a clean training dataset focused on second innings
 
-Model Training
+# Model Training
 
-Used an sklearn Pipeline with:
+Built an sklearn Pipeline combining:
 
-One-Hot Encoding for categorical variables
+One-Hot Encoding for categorical features
 
 Logistic Regression for probabilistic prediction
 
-Evaluated performance using ROC-AUC
+Evaluated the model using ROC-AUC (~0.88 on test data)
 
-Deployment
+Saved the trained pipeline as a serialized file (pipe.pkl)
 
-Saved the trained pipeline as a serialized file
+# Deployment
 
-Built a Streamlit app for real-time prediction and visualization
+Loaded the trained model for inference only (no retraining)
+
+Built an interactive Streamlit app
+
+Automatically calculates CRR and RRR from user inputs
+
+Displays win probabilities along with supporting visualizations
+
+Application Features
+
+Real-time win probability prediction
+
+Automatic run rate calculations
+
+Match summary and validation checks
+
+# Visualizations:
+
+CRR vs RRR comparison
+
+Team-wise win probability bar chart
+
+Match pressure snapshot (runs vs balls remaining)
 
 # Project Structure
 IPL WIN PREDICTOR/
 │
-├── app.py                  Streamlit app (inference + UI)
-├── pipe.pkl                 Trained ML pipeline
-├── README.md                Project documentation
-├── requirements.txt         Project dependencies
+├── app.py                  # Streamlit app for inference and visualization
+├── pipe.pkl                # Trained ML pipeline
+├── README.md               # Project documentation
+├── requirements.txt        # Dependencies
 │
 ├── data/
 │   ├── matches.csv
@@ -68,30 +93,6 @@ IPL WIN PREDICTOR/
     ├── feature_engineering.py
     └── train_model.py
 
-
-# Model Output
-
-The app displays the win probability of the batting team
-
-Probabilities are updated based on match state inputs
-
-CRR and RRR are automatically calculated to avoid user inconsistency
-
-# Evaluation Metric
-
-ROC-AUC was used to evaluate the model’s ability to rank winning vs losing match states
-
-# Tech Stack
-
-Python
-
-NumPy, Pandas
-
-Scikit-learn
-
-Streamlit
-
-Git & GitHub
 
 # Dataset
 
