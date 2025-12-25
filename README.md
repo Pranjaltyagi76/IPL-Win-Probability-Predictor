@@ -80,10 +80,9 @@ Match pressure snapshot (runs vs balls remaining)
 # Project Structure
 IPL WIN PREDICTOR/
 │
-├── app.py                  # Streamlit app for inference and visualization
-├── pipe.pkl                # Trained ML pipeline
-├── README.md               # Project documentation
-├── requirements.txt        # Dependencies
+├── app.py
+├── README.md
+├── requirements.txt
 │
 ├── data/
 │   ├── matches.csv
