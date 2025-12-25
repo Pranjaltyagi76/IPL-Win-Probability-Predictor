@@ -78,6 +78,7 @@ Team-wise win probability bar chart
 Match pressure snapshot (runs vs balls remaining)
 
 # Project Structure
+```text
 IPL WIN PREDICTOR/
 │
 ├── app.py
@@ -91,6 +92,8 @@ IPL WIN PREDICTOR/
 └── src/
     ├── feature_engineering.py
     └── train_model.py
+```
+
 
 
 # Dataset
