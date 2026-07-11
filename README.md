@@ -94,7 +94,7 @@ IPL WIN PREDICTOR/
     └── train_model.py
 ```
 
-
+If this project impressed you, consider giving it a ⭐
 
 # Dataset
 
