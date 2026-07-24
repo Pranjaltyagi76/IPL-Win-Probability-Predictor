@@ -40,7 +40,13 @@ def prepare_dataset(matches_path, deliveries_path):
         (matches['dl_applied'] == 0)
     ]
 
-    matches = matches[['match_id','city','winner','target']]
+    # Keep season as an integer so it can be used for a time-based split.
+    # Season values look like 'IPL-2018'; extract the year.
+    matches['season'] = (
+        matches['Season'].str.extract(r'(\d{4})').astype(int)
+    )
+
+    matches = matches[['match_id','season','city','winner','target']]
     df = matches.merge(deliveries, on='match_id')
     df = df[df['inning'] == 2].copy()
 
@@ -60,8 +66,12 @@ def prepare_dataset(matches_path, deliveries_path):
 
     df['result'] = (df['batting_team'] == df['winner']).astype(int)
 
+    # 'match_id' and 'season' are metadata, not model features. They let the
+    # training script split by match or by season so that balls from the same
+    # match cannot leak into both train and test.
     final_df = df[
-        ['batting_team','bowling_team','city',
+        ['match_id','season',
+         'batting_team','bowling_team','city',
          'runs_left','balls_left','wickets',
          'target','crr','rrr','result']
     ].dropna()
