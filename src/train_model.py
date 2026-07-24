@@ -1,7 +1,7 @@
 import pickle
 from sklearn.model_selection import train_test_split
 from sklearn.compose import ColumnTransformer
-from sklearn.preprocessing import OneHotEncoder
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from sklearn.pipeline import Pipeline
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import roc_auc_score
@@ -19,11 +19,17 @@ X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42
 )
 
-preprocessor = ColumnTransformer(
-    [('ohe', OneHotEncoder(drop='first', handle_unknown='ignore'),
-      ['batting_team','bowling_team','city'])],
-    remainder='passthrough'
-)
+CATEGORICAL = ['batting_team','bowling_team','city']
+NUMERIC = ['runs_left','balls_left','wickets','target','crr','rrr']
+
+# Scaling the numeric features lets lbfgs converge within max_iter and keeps
+# the logistic-regression probabilities well behaved. Previously the raw
+# 'target' and 'crr' scales caused a ConvergenceWarning on every run.
+preprocessor = ColumnTransformer([
+    ('ohe', OneHotEncoder(drop='first', handle_unknown='ignore'),
+     CATEGORICAL),
+    ('scale', StandardScaler(), NUMERIC),
+])
 
 pipe = Pipeline([
     ('preprocess', preprocessor),
