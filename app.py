@@ -80,9 +80,8 @@ if batting_team == bowling_team:
     st.error("Batting and bowling teams must be different.")
     st.stop()
 
-if runs_left < 0:
-    st.error("Current score cannot be greater than target.")
-    st.stop()
+# current_score >= target is not an error — it means the chase is already won.
+# That case is resolved at prediction time, so we deliberately don't stop here.
 
 # Prediction
 if st.button("Predict Win Probability"):
@@ -110,6 +109,17 @@ if st.button("Predict Win Probability"):
     ])
 
     win_prob = pipe.predict_proba(input_df)[0][1]
+
+    # Two match states are certainties, not predictions. The model is trained
+    # on ball-by-ball rows and will happily return e.g. 8% for a chase that is
+    # already complete, so resolve them explicitly.
+    if runs_left <= 0:
+        win_prob = 1.0
+        st.info("Target already reached — chase won.")
+    elif wickets == 0:
+        win_prob = 0.0
+        st.info("Batting team is all out — chase lost.")
+
     lose_prob = 1 - win_prob
 
     # Probability output
