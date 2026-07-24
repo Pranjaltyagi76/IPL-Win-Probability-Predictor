@@ -32,7 +32,10 @@ def build_pipeline(estimator=None):
     # Scaling the numeric features lets lbfgs converge and keeps the
     # logistic-regression probabilities well behaved.
     preprocessor = ColumnTransformer([
-        ('ohe', OneHotEncoder(drop='first', handle_unknown='ignore'),
+        # sparse_output=False: tree-based estimators such as
+        # HistGradientBoostingClassifier reject sparse input.
+        ('ohe', OneHotEncoder(drop='first', handle_unknown='ignore',
+                              sparse_output=False),
          CATEGORICAL),
         ('scale', StandardScaler(), NUMERIC),
     ])
