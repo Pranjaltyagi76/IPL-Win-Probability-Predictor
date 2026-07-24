@@ -6,12 +6,14 @@ from sklearn.pipeline import Pipeline
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import roc_auc_score
 
-from feature_engineering import prepare_dataset
+from feature_engineering import prepare_dataset, FEATURE_COLUMNS
 
 df = prepare_dataset('../data/matches.csv', '../data/deliveries.csv')
 
-X = df.iloc[:, :-1]
-y = df.iloc[:, -1]
+# Select features by name rather than position, so adding a column to the
+# dataset can never silently change what the model trains on.
+X = df[FEATURE_COLUMNS]
+y = df['result']
 
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42

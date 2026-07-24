@@ -67,3 +67,12 @@ def prepare_dataset(matches_path, deliveries_path):
     ].dropna()
 
     return final_df
+
+
+# Columns the model actually trains on (excludes the target).
+# Kept here so training and inference can never drift out of sync.
+FEATURE_COLUMNS = [
+    'batting_team','bowling_team','city',
+    'runs_left','balls_left','wickets',
+    'target','crr','rrr'
+]
