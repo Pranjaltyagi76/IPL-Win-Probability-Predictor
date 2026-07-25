@@ -123,6 +123,19 @@ def render_manual():
         if status is None:
             st.markdown("### Why this prediction")
             contribs = explain(pipe, input_df)
+
+            # Plain-English summary of the biggest factors either way.
+            helping = [label for label, c in contribs if c > 0][:3]
+            hurting = [label for label, c in contribs if c < 0][:3]
+            if helping:
+                st.markdown(
+                    f"**Helping {batting_team}:** " + ", ".join(helping)
+                )
+            if hurting:
+                st.markdown(
+                    f"**Hurting {batting_team}:** " + ", ".join(hurting)
+                )
+
             labels = [c[0] for c in contribs][::-1]
             values = [c[1] for c in contribs][::-1]
             colors = ["#2ca02c" if v > 0 else "#d62728" for v in values]
