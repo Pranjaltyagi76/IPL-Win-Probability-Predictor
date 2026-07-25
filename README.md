@@ -1,5 +1,7 @@
 # IPL Win Probability Predictor
 
+[![CI](https://github.com/Pranjaltyagi76/IPL-Win-Probability-Predictor/actions/workflows/ci.yml/badge.svg)](https://github.com/Pranjaltyagi76/IPL-Win-Probability-Predictor/actions/workflows/ci.yml)
+
 This project predicts the win probability of the batting team during the second innings of an IPL match based on the current match situation.
 
 It demonstrates a complete end-to-end machine learning workflow, starting from raw IPL ball-by-ball data to a deployed interactive web application.
