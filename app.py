@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 # Inference + replay helpers live in src/; make them importable from the root.
 sys.path.append(os.path.join(os.path.dirname(__file__), "src"))
 from predict import load_model, build_features, win_probability
-from replay import load_data, list_matches
+from replay import load_data, list_matches, win_probability_curve
 
 # Load trained model pipeline
 pipe = load_model()
@@ -182,6 +182,30 @@ def render_replay():
 - Result: {info['winner']} {margin}
 - Player of the Match: {info['player_of_match']}
 """)
+
+    # Ball-by-ball win-probability curve for the chasing team.
+    curve = win_probability_curve(pipe, match_id, matches, deliveries)
+    if curve.empty:
+        st.warning("No second-innings data available for this match.")
+        return
+
+    chaser = deliveries[
+        (deliveries["match_id"] == match_id) & (deliveries["inning"] == 2)
+    ]["batting_team"].iloc[0]
+
+    st.markdown(f"### Win Probability — {chaser} (chasing)")
+
+    fig, ax = plt.subplots(figsize=(9, 4))
+    ax.plot(curve["ball_no"], curve["win_prob"] * 100,
+            color="#1f77b4", linewidth=2)
+    ax.fill_between(curve["ball_no"], curve["win_prob"] * 100,
+                    color="#1f77b4", alpha=0.12)
+    ax.axhline(50, color="grey", linestyle="--", linewidth=1)
+    ax.set_xlabel("Ball of the second innings")
+    ax.set_ylabel(f"{chaser} win probability (%)")
+    ax.set_ylim(0, 100)
+    ax.set_xlim(curve["ball_no"].min(), curve["ball_no"].max())
+    st.pyplot(fig)
 
 
 # --- Mode selector -----------------------------------------------------------
