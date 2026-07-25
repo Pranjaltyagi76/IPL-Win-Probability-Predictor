@@ -27,3 +27,17 @@ def test_probability_always_in_unit_range(pipe):
     for runs_left, balls_left, wickets in grid:
         prob = _prob(pipe, runs_left, balls_left, wickets)
         assert 0.0 <= prob <= 1.0, (runs_left, balls_left, wickets, prob)
+
+
+def test_win_prob_rises_as_runs_needed_falls(pipe):
+    # Fewer runs to get (same balls, same wickets) must not lower win prob.
+    probs = [_prob(pipe, runs_left, balls_left=60, wickets=6)
+             for runs_left in (90, 70, 50, 30, 10)]
+    assert probs == sorted(probs), probs
+
+
+def test_win_prob_rises_with_more_wickets_in_hand(pipe):
+    # More wickets in hand (same target situation) must not lower win prob.
+    probs = [_prob(pipe, runs_left=40, balls_left=30, wickets=w)
+             for w in (1, 3, 6, 9)]
+    assert probs == sorted(probs), probs
