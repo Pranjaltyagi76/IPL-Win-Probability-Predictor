@@ -202,13 +202,24 @@ def render_replay():
                     color="#1f77b4", alpha=0.12, zorder=1)
     ax.axhline(50, color="grey", linestyle="--", linewidth=1, zorder=1)
 
+    # Boundaries lift the curve; sixes are called out separately from fours.
+    fours = curve[(curve["is_boundary"] == 1) & (curve["runs_this_ball"] == 4)]
+    sixes = curve[(curve["is_boundary"] == 1) & (curve["runs_this_ball"] == 6)]
+    if not fours.empty:
+        ax.scatter(fours["ball_no"], fours["win_prob"] * 100,
+                   color="#2ca02c", marker="o", s=28, zorder=3, label="Four")
+    if not sixes.empty:
+        ax.scatter(sixes["ball_no"], sixes["win_prob"] * 100,
+                   color="#9467bd", marker="^", s=45, zorder=3, label="Six")
+
     # Mark every wicket — these are the sharpest swings in the curve.
     wickets_hit = curve[curve["is_wicket"] == 1]
     if not wickets_hit.empty:
         ax.scatter(wickets_hit["ball_no"], wickets_hit["win_prob"] * 100,
-                   color="#d62728", marker="v", s=70, zorder=3,
+                   color="#d62728", marker="v", s=70, zorder=4,
                    label="Wicket")
-        ax.legend(loc="upper right")
+
+    ax.legend(loc="upper right", ncol=3, fontsize=8)
 
     ax.set_xlabel("Ball of the second innings")
     ax.set_ylabel(f"{chaser} win probability (%)")
