@@ -11,6 +11,7 @@ also reports a group-random split (whole matches held out) and the old, leaky
 row-random split so the gap is visible.
 """
 
+import os
 import pickle
 
 from sklearn.model_selection import GroupShuffleSplit, train_test_split
@@ -26,6 +27,13 @@ TEST_SEASON_START = 2018
 
 CATEGORICAL = ['batting_team', 'bowling_team', 'city']
 NUMERIC = ['runs_left', 'balls_left', 'wickets', 'target', 'crr', 'rrr']
+
+# Paths resolved relative to this file so training works from any working
+# directory (the src/ CLI, the repo-root app, or CI).
+_ROOT = os.path.join(os.path.dirname(__file__), os.pardir)
+DEFAULT_MATCHES = os.path.join(_ROOT, 'data', 'matches.csv')
+DEFAULT_DELIVERIES = os.path.join(_ROOT, 'data', 'deliveries.csv')
+DEFAULT_MODEL_PATH = os.path.join(_ROOT, 'pipe.pkl')
 
 
 def build_pipeline(estimator=None):
@@ -64,8 +72,28 @@ def evaluate(name, X_train, X_test, y_train, y_test):
     return pipe, auc
 
 
+def train_and_save(model_path=DEFAULT_MODEL_PATH,
+                   matches_path=DEFAULT_MATCHES,
+                   deliveries_path=DEFAULT_DELIVERIES):
+    """Train the shipped (time-based) model and pickle it to model_path.
+
+    This is the single source of truth for producing pipe.pkl: it is used by
+    the CLI below and by the app's first-run auto-train. Returns the fitted
+    pipeline.
+    """
+    df = prepare_dataset(matches_path, deliveries_path)
+    X_train, X_test, y_train, y_test = time_split(df)
+
+    pipe = build_pipeline()
+    pipe.fit(X_train, y_train)
+
+    with open(model_path, 'wb') as f:
+        pickle.dump(pipe, f)
+    return pipe
+
+
 def main():
-    df = prepare_dataset('../data/matches.csv', '../data/deliveries.csv')
+    df = prepare_dataset(DEFAULT_MATCHES, DEFAULT_DELIVERIES)
 
     X = df[FEATURE_COLUMNS]
     y = df['result']
@@ -100,9 +128,9 @@ def main():
         "deployment-\nrealistic number -- that's the model we ship.\n"
     )
 
-    # Ship the time-based model (already fit on 2008-2017).
-    pickle.dump(pipe, open('../pipe.pkl', 'wb'))
-    print("Saved ../pipe.pkl (trained on seasons < %d)" % TEST_SEASON_START)
+    # Ship the time-based model, retrained and saved via the shared entry point.
+    train_and_save()
+    print("Saved pipe.pkl (trained on seasons < %d)" % TEST_SEASON_START)
 
 
 if __name__ == '__main__':
