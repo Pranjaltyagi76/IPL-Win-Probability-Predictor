@@ -4,9 +4,10 @@ import sys
 import streamlit as st
 import matplotlib.pyplot as plt
 
-# Inference helpers live in src/; make them importable from the repo root.
+# Inference + replay helpers live in src/; make them importable from the root.
 sys.path.append(os.path.join(os.path.dirname(__file__), "src"))
 from predict import load_model, build_features, win_probability
+from replay import load_data, list_matches
 
 # Load trained model pipeline
 pipe = load_model()
@@ -40,108 +41,158 @@ cities = [
     'Sharjah','Mohali','Bengaluru'
 ]
 
-# Input layout
-col1, col2 = st.columns(2)
 
-with col1:
-    batting_team = st.selectbox("Batting Team", teams)
-    city = st.selectbox("City", cities)
-    current_score = st.number_input("Current Score", min_value=0, step=1)
+def render_manual():
+    """Manual mode: enter a hypothetical match state and predict."""
+    # Input layout
+    col1, col2 = st.columns(2)
 
-with col2:
-    bowling_team = st.selectbox("Bowling Team", teams)
-    target = st.number_input("Target Score", min_value=1, step=1)
-    wickets = st.number_input("Wickets Left", min_value=0, max_value=10, step=1)
+    with col1:
+        batting_team = st.selectbox("Batting Team", teams)
+        city = st.selectbox("City", cities)
+        current_score = st.number_input("Current Score", min_value=0, step=1)
 
-balls_left = st.slider("Balls Left", min_value=1, max_value=120)
+    with col2:
+        bowling_team = st.selectbox("Bowling Team", teams)
+        target = st.number_input("Target Score", min_value=1, step=1)
+        wickets = st.number_input(
+            "Wickets Left", min_value=0, max_value=10, step=1
+        )
 
-# Feature engineering
-runs_left = target - current_score
+    balls_left = st.slider("Balls Left", min_value=1, max_value=120)
 
-overs_played = (120 - balls_left) / 6
-overs_left = balls_left / 6
+    # Feature engineering
+    runs_left = target - current_score
 
-crr = (current_score / overs_played) if overs_played > 0 else 0
-rrr = (runs_left / overs_left) if overs_left > 0 else 0
+    overs_played = (120 - balls_left) / 6
+    overs_left = balls_left / 6
 
-# Run rate display
-st.info(f"Current Run Rate (CRR): {crr:.2f}")
-st.info(f"Required Run Rate (RRR): {rrr:.2f}")
+    crr = (current_score / overs_played) if overs_played > 0 else 0
+    rrr = (runs_left / overs_left) if overs_left > 0 else 0
 
-# Match summary
-st.markdown("### Match Summary")
-st.write(f"""
-- Batting Team: {batting_team}  
-- Bowling Team: {bowling_team}  
-- City: {city}  
-- Target: {target}  
-- Runs Needed: {runs_left}  
-- Balls Remaining: {balls_left}  
+    # Run rate display
+    st.info(f"Current Run Rate (CRR): {crr:.2f}")
+    st.info(f"Required Run Rate (RRR): {rrr:.2f}")
+
+    # Match summary
+    st.markdown("### Match Summary")
+    st.write(f"""
+- Batting Team: {batting_team}
+- Bowling Team: {bowling_team}
+- City: {city}
+- Target: {target}
+- Runs Needed: {runs_left}
+- Balls Remaining: {balls_left}
 - Wickets Left: {wickets}
 """)
 
-# Validations
-if batting_team == bowling_team:
-    st.error("Batting and bowling teams must be different.")
-    st.stop()
+    # Validations
+    if batting_team == bowling_team:
+        st.error("Batting and bowling teams must be different.")
+        st.stop()
 
-# current_score >= target is not an error — it means the chase is already won.
-# That case is resolved at prediction time, so we deliberately don't stop here.
+    # current_score >= target is not an error — it means the chase is already
+    # won. That case is resolved at prediction time, so we don't stop here.
 
-# Prediction
-if st.button("Predict Win Probability"):
+    # Prediction
+    if st.button("Predict Win Probability"):
 
-    input_df = build_features(
-        batting_team, bowling_team, city,
-        runs_left, balls_left, wickets, target, crr, rrr
+        input_df = build_features(
+            batting_team, bowling_team, city,
+            runs_left, balls_left, wickets, target, crr, rrr
+        )
+
+        win_prob, status = win_probability(pipe, input_df)
+        if status:
+            st.info(status)
+
+        lose_prob = 1 - win_prob
+
+        # Probability output
+        st.markdown("## Win Probability")
+        st.progress(win_prob)
+
+        st.success(f"{batting_team}: {win_prob * 100:.2f}%")
+        st.error(f"{bowling_team}: {lose_prob * 100:.2f}%")
+
+        # Graph 1: CRR vs RRR
+        st.markdown("### Run Rate Comparison")
+
+        fig1, ax1 = plt.subplots()
+        ax1.bar(["Current Run Rate", "Required Run Rate"], [crr, rrr])
+        ax1.set_ylabel("Runs per Over")
+        ax1.set_title("CRR vs RRR")
+
+        st.pyplot(fig1)
+
+        # Graph 2: Win probability bar
+        st.markdown("### Team-wise Win Probability")
+
+        fig2, ax2 = plt.subplots()
+        ax2.bar(
+            [batting_team, bowling_team],
+            [win_prob * 100, lose_prob * 100]
+        )
+        ax2.set_ylabel("Win Probability (%)")
+        ax2.set_ylim(0, 100)
+
+        st.pyplot(fig2)
+
+        # Graph 3: Match pressure snapshot
+        st.markdown("### Match Pressure Snapshot")
+
+        fig3, ax3 = plt.subplots()
+        ax3.scatter(balls_left, runs_left, color="red", s=100)
+        ax3.set_xlabel("Balls Left")
+        ax3.set_ylabel("Runs Left")
+        ax3.set_title("Runs Required vs Balls Remaining")
+
+        st.pyplot(fig3)
+
+
+def render_replay():
+    """Replay mode: pick a real historical chase to analyse ball by ball."""
+    st.caption(
+        "Pick a real IPL chase and see how the win probability moved across "
+        "the second innings."
     )
 
-    win_prob, status = win_probability(pipe, input_df)
-    if status:
-        st.info(status)
-
-    lose_prob = 1 - win_prob
-
-    # Probability output
-    st.markdown("## Win Probability")
-    st.progress(win_prob)
-
-    st.success(f"{batting_team}: {win_prob * 100:.2f}%")
-    st.error(f"{bowling_team}: {lose_prob * 100:.2f}%")
-
-    # Graph 1: CRR vs RRR
-    st.markdown("### Run Rate Comparison")
-
-    fig1, ax1 = plt.subplots()
-    ax1.bar(["Current Run Rate", "Required Run Rate"], [crr, rrr])
-    ax1.set_ylabel("Runs per Over")
-    ax1.set_title("CRR vs RRR")
-
-    st.pyplot(fig1)
-
-    # Graph 2: Win probability bar
-    st.markdown("### Team-wise Win Probability")
-
-    fig2, ax2 = plt.subplots()
-    ax2.bar(
-        [batting_team, bowling_team],
-        [win_prob * 100, lose_prob * 100]
+    matches, deliveries = load_data(
+        os.path.join("data", "matches.csv"),
+        os.path.join("data", "deliveries.csv"),
     )
-    ax2.set_ylabel("Win Probability (%)")
-    ax2.set_ylim(0, 100)
+    catalogue = list_matches(matches, deliveries)
 
-    st.pyplot(fig2)
+    choice = st.selectbox("Select a match", catalogue["label"].tolist())
+    match_id = int(catalogue.loc[catalogue["label"] == choice, "id"].iloc[0])
 
-    # Graph 3: Match pressure snapshot
-    st.markdown("### Match Pressure Snapshot")
+    info = matches[matches["id"] == match_id].iloc[0]
+    if info["win_by_runs"] > 0:
+        margin = f"won by {int(info['win_by_runs'])} runs"
+    elif info["win_by_wickets"] > 0:
+        margin = f"won by {int(info['win_by_wickets'])} wickets"
+    else:
+        margin = "result decided without a standard margin"
 
-    fig3, ax3 = plt.subplots()
-    ax3.scatter(balls_left, runs_left, color="red", s=100)
-    ax3.set_xlabel("Balls Left")
-    ax3.set_ylabel("Runs Left")
-    ax3.set_title("Runs Required vs Balls Remaining")
+    st.markdown("### Match Summary")
+    st.write(f"""
+- Season: {info['Season']}
+- Teams: {info['team1']} vs {info['team2']}
+- Venue: {info['city']}
+- Result: {info['winner']} {margin}
+- Player of the Match: {info['player_of_match']}
+""")
 
-    st.pyplot(fig3)
+
+# --- Mode selector -----------------------------------------------------------
+mode = st.sidebar.radio(
+    "Mode", ["Match Replay", "Manual Prediction"]
+)
+
+if mode == "Match Replay":
+    render_replay()
+else:
+    render_manual()
 
 # Ending
 st.markdown("---")

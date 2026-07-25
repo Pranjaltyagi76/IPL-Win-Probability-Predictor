@@ -17,11 +17,48 @@ TEAM_MAP = {
     'Deccan Chargers': 'Sunrisers Hyderabad',
 }
 
+VALID_TEAMS = [
+    'Sunrisers Hyderabad', 'Mumbai Indians', 'Royal Challengers Bangalore',
+    'Kolkata Knight Riders', 'Kings XI Punjab', 'Chennai Super Kings',
+    'Rajasthan Royals', 'Delhi Capitals',
+]
+
 
 def load_data(matches_path='data/matches.csv',
               deliveries_path='data/deliveries.csv'):
     """Load the raw match and delivery tables once, for reuse across replays."""
     return pd.read_csv(matches_path), pd.read_csv(deliveries_path)
+
+
+def list_matches(matches, deliveries):
+    """Selectable, replayable matches with a human-readable label.
+
+    Restricted to the eight canonical teams, non-DLS results, and matches that
+    actually have a second innings to replay. Returned newest-season first.
+    """
+    m = matches.replace(TEAM_MAP)
+    m = m[
+        m['team1'].isin(VALID_TEAMS)
+        & m['team2'].isin(VALID_TEAMS)
+        & (m['dl_applied'] == 0)
+    ].copy()
+
+    chased = set(deliveries[deliveries['inning'] == 2]['match_id'].unique())
+    m = m[m['id'].isin(chased)]
+
+    m['season_year'] = m['Season'].str.extract(r'(\d{4})').astype(int)
+    m['winner'] = m['winner'].replace(TEAM_MAP)
+    m['label'] = (
+        m['season_year'].astype(str) + '  ·  '
+        + m['team1'] + ' vs ' + m['team2']
+        + '  ·  ' + m['city'].fillna('Neutral venue')
+        + '  —  ' + m['winner'].fillna('No result') + ' won'
+    )
+
+    out = m[['id', 'label', 'season_year']].sort_values(
+        ['season_year', 'id'], ascending=[False, True]
+    )
+    return out.reset_index(drop=True)
 
 
 def win_probability_curve(pipe, match_id, matches, deliveries):
