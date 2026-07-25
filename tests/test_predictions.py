@@ -41,3 +41,25 @@ def test_win_prob_rises_with_more_wickets_in_hand(pipe):
     probs = [_prob(pipe, runs_left=40, balls_left=30, wickets=w)
              for w in (1, 3, 6, 9)]
     assert probs == sorted(probs), probs
+
+
+def test_all_out_forces_loss(pipe):
+    # No wickets in hand with runs still needed => certain loss.
+    features = build_features(
+        "Mumbai Indians", "Chennai Super Kings", "Mumbai",
+        runs_left=30, balls_left=24, wickets=0, target=180, crr=9.0, rrr=7.5,
+    )
+    prob, status = win_probability(pipe, features)
+    assert prob == 0.0
+    assert status is not None
+
+
+def test_target_reached_forces_win(pipe):
+    # Target already chased down => certain win.
+    features = build_features(
+        "Mumbai Indians", "Chennai Super Kings", "Mumbai",
+        runs_left=0, balls_left=12, wickets=4, target=180, crr=9.0, rrr=0.0,
+    )
+    prob, status = win_probability(pipe, features)
+    assert prob == 1.0
+    assert status is not None
