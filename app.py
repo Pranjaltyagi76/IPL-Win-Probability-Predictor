@@ -1,10 +1,15 @@
+import os
+import sys
+
 import streamlit as st
-import pandas as pd
-import pickle
 import matplotlib.pyplot as plt
 
+# Inference helpers live in src/; make them importable from the repo root.
+sys.path.append(os.path.join(os.path.dirname(__file__), "src"))
+from predict import load_model, build_features, win_probability
+
 # Load trained model pipeline
-pipe = pickle.load(open("pipe.pkl", "rb"))
+pipe = load_model()
 
 # Page configuration
 st.set_page_config(
@@ -86,39 +91,14 @@ if batting_team == bowling_team:
 # Prediction
 if st.button("Predict Win Probability"):
 
-    input_df = pd.DataFrame([[
-        batting_team,
-        bowling_team,
-        city,
-        runs_left,
-        balls_left,
-        wickets,
-        target,
-        crr,
-        rrr
-    ]], columns=[
-        'batting_team',
-        'bowling_team',
-        'city',
-        'runs_left',
-        'balls_left',
-        'wickets',
-        'target',
-        'crr',
-        'rrr'
-    ])
+    input_df = build_features(
+        batting_team, bowling_team, city,
+        runs_left, balls_left, wickets, target, crr, rrr
+    )
 
-    win_prob = pipe.predict_proba(input_df)[0][1]
-
-    # Two match states are certainties, not predictions. The model is trained
-    # on ball-by-ball rows and will happily return e.g. 8% for a chase that is
-    # already complete, so resolve them explicitly.
-    if runs_left <= 0:
-        win_prob = 1.0
-        st.info("Target already reached — chase won.")
-    elif wickets == 0:
-        win_prob = 0.0
-        st.info("Batting team is all out — chase lost.")
+    win_prob, status = win_probability(pipe, input_df)
+    if status:
+        st.info(status)
 
     lose_prob = 1 - win_prob
 
