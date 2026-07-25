@@ -197,10 +197,19 @@ def render_replay():
 
     fig, ax = plt.subplots(figsize=(9, 4))
     ax.plot(curve["ball_no"], curve["win_prob"] * 100,
-            color="#1f77b4", linewidth=2)
+            color="#1f77b4", linewidth=2, zorder=2)
     ax.fill_between(curve["ball_no"], curve["win_prob"] * 100,
-                    color="#1f77b4", alpha=0.12)
-    ax.axhline(50, color="grey", linestyle="--", linewidth=1)
+                    color="#1f77b4", alpha=0.12, zorder=1)
+    ax.axhline(50, color="grey", linestyle="--", linewidth=1, zorder=1)
+
+    # Mark every wicket — these are the sharpest swings in the curve.
+    wickets_hit = curve[curve["is_wicket"] == 1]
+    if not wickets_hit.empty:
+        ax.scatter(wickets_hit["ball_no"], wickets_hit["win_prob"] * 100,
+                   color="#d62728", marker="v", s=70, zorder=3,
+                   label="Wicket")
+        ax.legend(loc="upper right")
+
     ax.set_xlabel("Ball of the second innings")
     ax.set_ylabel(f"{chaser} win probability (%)")
     ax.set_ylim(0, 100)
