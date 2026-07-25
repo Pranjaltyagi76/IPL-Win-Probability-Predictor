@@ -95,7 +95,10 @@ def win_probability_curve(pipe, match_id, matches, deliveries):
     inn['rrr'] = (inn['runs_left'] * 6) / inn['balls_left'].clip(lower=1)
 
     inn['target'] = target
-    inn['city'] = match['city']
+    # Some matches have no recorded city (NaN). Left as a float NaN it makes the
+    # whole city column non-string and breaks the one-hot encoder's unknown
+    # check, so coerce to a string the model treats as an unseen category.
+    inn['city'] = match['city'] if pd.notna(match['city']) else 'Unknown'
 
     # Score every ball in one batched call, then force terminal states.
     features = inn[FEATURE_COLUMNS]
