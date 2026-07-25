@@ -263,6 +263,21 @@ def render_replay():
     ax.set_xlim(curve["ball_no"].min(), curve["ball_no"].max())
     st.pyplot(fig)
 
+    st.caption("▼ wicket · ● four · ▲ six · dashed line = 50% (even contest)")
+
+    # Drama highlights computed straight from the curve.
+    p = curve["win_prob"].values
+    lead_changes = int(((p[:-1] - 0.5) * (p[1:] - 0.5) < 0).sum())
+    chaser_won = info["winner"] == chaser
+    if chaser_won:
+        swing = f"recovered from as low as {p.min() * 100:.0f}%"
+    else:
+        swing = f"peaked at {p.max() * 100:.0f}% but fell short"
+
+    c1, c2 = st.columns(2)
+    c1.metric("Lead changes (50% crossings)", lead_changes)
+    c2.metric(f"{chaser} (chasing)", swing)
+
 
 # --- Mode selector -----------------------------------------------------------
 mode = st.sidebar.radio(
