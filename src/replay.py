@@ -23,6 +23,12 @@ VALID_TEAMS = [
     'Rajasthan Royals', 'Delhi Capitals',
 ]
 
+# The 2008 inaugural IPL final (CSK vs Rajasthan Royals), won off the last
+# ball. Its win-probability curve crosses 50% ten times — the most dramatic
+# finish in the dataset — so it opens the replay by default. Chosen by ranking
+# every chase on late 50%-line crossings; see the thriller scan in the repo.
+FEATURED_MATCH_ID = 117
+
 
 def load_data(matches_path='data/matches.csv',
               deliveries_path='data/deliveries.csv'):

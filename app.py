@@ -7,7 +7,9 @@ import matplotlib.pyplot as plt
 # Inference + replay helpers live in src/; make them importable from the root.
 sys.path.append(os.path.join(os.path.dirname(__file__), "src"))
 from predict import load_model, build_features, win_probability
-from replay import load_data, list_matches, win_probability_curve
+from replay import (
+    load_data, list_matches, win_probability_curve, FEATURED_MATCH_ID
+)
 
 # Load trained model pipeline
 pipe = load_model()
@@ -162,8 +164,13 @@ def render_replay():
         os.path.join("data", "deliveries.csv"),
     )
     catalogue = list_matches(matches, deliveries)
+    labels = catalogue["label"].tolist()
 
-    choice = st.selectbox("Select a match", catalogue["label"].tolist())
+    # Open on the featured thriller (the 2008 final) if it is available.
+    featured = catalogue.index[catalogue["id"] == FEATURED_MATCH_ID]
+    default_index = int(featured[0]) if len(featured) else 0
+
+    choice = st.selectbox("Select a match", labels, index=default_index)
     match_id = int(catalogue.loc[catalogue["label"] == choice, "id"].iloc[0])
 
     info = matches[matches["id"] == match_id].iloc[0]
