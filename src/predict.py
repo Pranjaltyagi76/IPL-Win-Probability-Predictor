@@ -50,3 +50,58 @@ def win_probability(pipe, features_row):
 
     prob = float(pipe.predict_proba(features_row[FEATURE_COLUMNS])[0][1])
     return prob, None
+
+
+# Human-readable names for the numeric features.
+_PRETTY_NUMERIC = {
+    "runs_left": "Runs left",
+    "balls_left": "Balls left",
+    "wickets": "Wickets in hand",
+    "target": "Target",
+    "crr": "Current run rate",
+    "rrr": "Required run rate",
+}
+
+
+def _prettify(name):
+    """Turn a transformed feature name into something a human can read."""
+    if name.startswith("scale__"):
+        return _PRETTY_NUMERIC.get(name[7:], name[7:])
+    if name.startswith("ohe__"):
+        body = name[5:]
+        # Field names themselves contain underscores (e.g. batting_team), so
+        # match the known field prefix rather than splitting on the first "_".
+        for field, label in (("batting_team", "Batting team"),
+                             ("bowling_team", "Bowling team"),
+                             ("city", "City")):
+            if body.startswith(field + "_"):
+                return f"{label} = {body[len(field) + 1:]}"
+        return body
+    return name
+
+
+def explain(pipe, features_row, top_n=6):
+    """Break a single prediction into per-feature log-odds contributions.
+
+    For a linear model each feature's contribution is coefficient * (encoded
+    value), so this is an exact decomposition, not an approximation. Returns
+    (label, contribution) pairs sorted by magnitude; positive pushes the win
+    probability up, negative pushes it down.
+    """
+    pre = pipe.named_steps["preprocess"]
+    model = pipe.named_steps["model"]
+
+    encoded = pre.transform(features_row[FEATURE_COLUMNS])
+    if hasattr(encoded, "toarray"):
+        encoded = encoded.toarray()
+
+    names = pre.get_feature_names_out()
+    contributions = model.coef_[0] * encoded[0]
+
+    pairs = [
+        (_prettify(n), float(c))
+        for n, c in zip(names, contributions)
+        if abs(c) > 1e-9
+    ]
+    pairs.sort(key=lambda pair: abs(pair[1]), reverse=True)
+    return pairs[:top_n]

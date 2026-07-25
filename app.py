@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 # Inference + replay helpers live in src/; make them importable from the root.
 sys.path.append(os.path.join(os.path.dirname(__file__), "src"))
-from predict import load_model, build_features, win_probability
+from predict import load_model, build_features, win_probability, explain
 from replay import (
     load_data, list_matches, win_probability_curve, FEATURED_MATCH_ID
 )
@@ -116,6 +116,22 @@ def render_manual():
 
         st.success(f"{batting_team}: {win_prob * 100:.2f}%")
         st.error(f"{bowling_team}: {lose_prob * 100:.2f}%")
+
+        # Explanation: exact per-feature contributions to the win log-odds.
+        # Only meaningful when the model actually made the call (not a forced
+        # all-out / target-reached certainty).
+        if status is None:
+            st.markdown("### Why this prediction")
+            contribs = explain(pipe, input_df)
+            labels = [c[0] for c in contribs][::-1]
+            values = [c[1] for c in contribs][::-1]
+            colors = ["#2ca02c" if v > 0 else "#d62728" for v in values]
+
+            figx, axx = plt.subplots(figsize=(7, 3.5))
+            axx.barh(labels, values, color=colors)
+            axx.axvline(0, color="black", linewidth=0.8)
+            axx.set_xlabel("Contribution to win probability (log-odds)")
+            st.pyplot(figx)
 
         # Graph 1: CRR vs RRR
         st.markdown("### Run Rate Comparison")
