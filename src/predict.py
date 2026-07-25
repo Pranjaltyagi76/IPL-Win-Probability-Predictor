@@ -19,6 +19,17 @@ DEFAULT_MODEL_PATH = os.path.join(
 
 
 def load_model(path=DEFAULT_MODEL_PATH):
+    """Load the pickled pipeline, training it once if it doesn't exist yet.
+
+    pipe.pkl is a generated artifact kept out of version control, so a fresh
+    clone has no model. Rather than crash, train it from the bundled data on
+    first use and cache it to disk for subsequent runs.
+    """
+    if not os.path.exists(path):
+        # Imported lazily so normal inference doesn't pull in training deps.
+        from train_model import train_and_save
+        return train_and_save(model_path=path)
+
     with open(path, "rb") as f:
         return pickle.load(f)
 
