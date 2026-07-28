@@ -4,6 +4,25 @@ import sys
 import streamlit as st
 import matplotlib.pyplot as plt
 
+# Match the dark Streamlit theme: transparent figure backgrounds with light
+# axes and text, so charts blend into the page instead of sitting inside
+# white boxes.
+plt.rcParams.update({
+    "figure.facecolor": "none",
+    "axes.facecolor": "none",
+    "savefig.facecolor": "none",
+    "savefig.transparent": True,
+    "text.color": "#fafafa",
+    "axes.labelcolor": "#fafafa",
+    "axes.titlecolor": "#fafafa",
+    "axes.edgecolor": "#8b93a7",
+    "xtick.color": "#c9d1d9",
+    "ytick.color": "#c9d1d9",
+    "legend.facecolor": "#1a1f2b",
+    "legend.edgecolor": "#2a3040",
+    "legend.labelcolor": "#fafafa",
+})
+
 # Inference + replay helpers live in src/; make them importable from the root.
 sys.path.append(os.path.join(os.path.dirname(__file__), "src"))
 from predict import load_model, build_features, win_probability, explain

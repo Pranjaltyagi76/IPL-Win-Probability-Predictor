@@ -1,0 +1,14 @@
+# Streamlit appearance and server defaults.
+# Committed so the deployed app and every local run look the same.
+
+[theme]
+base = "dark"
+primaryColor = "#1f77b4"
+backgroundColor = "#0e1117"
+secondaryBackgroundColor = "#1a1f2b"
+textColor = "#fafafa"
+font = "sans serif"
+
+[browser]
+# Don't phone home with usage stats.
+gatherUsageStats = false
