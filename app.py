@@ -29,15 +29,36 @@ from predict import load_model, build_features, win_probability, explain
 from replay import (
     load_data, list_matches, win_probability_curve, FEATURED_MATCH_ID
 )
-
-# Load trained model pipeline
-pipe = load_model()
+from train_model import DEFAULT_MATCHES, DEFAULT_DELIVERIES
 
 # Page configuration
 st.set_page_config(
     page_title="IPL Win Probability Predictor",
     layout="centered"
 )
+
+
+# Streamlit re-runs this script top to bottom on every widget interaction, so
+# the model and the ball-by-ball CSVs are cached. Reading the deliveries table
+# takes ~2.8s, which would otherwise be paid on every click.
+@st.cache_resource(show_spinner="Preparing the model…")
+def get_model():
+    return load_model()
+
+
+@st.cache_data(show_spinner="Loading ball-by-ball data…")
+def get_data():
+    return load_data(DEFAULT_MATCHES, DEFAULT_DELIVERIES)
+
+
+# Leading underscores tell Streamlit not to hash these arguments; the match_id
+# is what identifies the cached result.
+@st.cache_data(show_spinner=False)
+def get_curve(_pipe, _matches, _deliveries, match_id):
+    return win_probability_curve(_pipe, match_id, _matches, _deliveries)
+
+
+pipe = get_model()
 
 st.title("IPL Win Probability Predictor")
 
@@ -207,10 +228,7 @@ def render_replay():
         "the second innings."
     )
 
-    matches, deliveries = load_data(
-        os.path.join("data", "matches.csv"),
-        os.path.join("data", "deliveries.csv"),
-    )
+    matches, deliveries = get_data()
     catalogue = list_matches(matches, deliveries)
     labels = catalogue["label"].tolist()
 
@@ -239,7 +257,7 @@ def render_replay():
 """)
 
     # Ball-by-ball win-probability curve for the chasing team.
-    curve = win_probability_curve(pipe, match_id, matches, deliveries)
+    curve = get_curve(pipe, matches, deliveries, match_id)
     if curve.empty:
         st.warning("No second-innings data available for this match.")
         return
