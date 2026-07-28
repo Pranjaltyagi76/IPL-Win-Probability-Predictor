@@ -12,6 +12,7 @@ the way broadcast win-probability graphics do.
 ## Contents
 
 - [What this does](#what-this-does)
+- [Quickstart](#quickstart)
 - [Features](#features)
 - [How it works](#how-it-works)
 - [Project structure](#project-structure)
@@ -33,6 +34,27 @@ Two things separate this from a standard "fit a classifier, show a number" proje
    season instead, and reports the lower, deployment-realistic number.
 2. **Every prediction is explainable.** The app breaks each estimate into the
    individual factors pushing the win probability up or down.
+
+## Quickstart
+
+```bash
+git clone https://github.com/Pranjaltyagi76/IPL-Win-Probability-Predictor.git
+cd IPL-Win-Probability-Predictor
+pip install -r requirements.txt
+streamlit run app.py
+```
+
+The trained model (`pipe.pkl`) is not committed — it is a generated artifact.
+The app trains it from the bundled data the first time it starts, so the clone
+above is all you need.
+
+Optional commands, all runnable from the repository root:
+
+```bash
+python src/train_model.py   # retrain, and print the split comparison
+python src/evaluate.py      # ROC-AUC, Brier, calibration, per-phase scores
+pytest -q                   # run the test suite
+```
 
 ## Features
 
