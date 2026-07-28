@@ -15,6 +15,7 @@ the way broadcast win-probability graphics do.
 - [Quickstart](#quickstart)
 - [Features](#features)
 - [How it works](#how-it-works)
+- [Why the reported accuracy dropped](#why-the-reported-accuracy-dropped)
 - [Project structure](#project-structure)
 - [Tests and CI](#tests-and-ci)
 - [Dataset](#dataset)
@@ -94,6 +95,35 @@ A scikit-learn `Pipeline`: one-hot encoding for the categorical columns, standar
 scaling for the numeric ones, and logistic regression on top. The pipeline is
 serialised to `pipe.pkl`, which is generated rather than committed — the app
 trains it automatically on first run.
+
+## Why the reported accuracy dropped
+
+An earlier version of this project reported **ROC-AUC ≈ 0.887**. It now reports
+**0.823**. Nothing about the model got worse — the earlier number was measured
+wrongly, and this is the correction.
+
+The dataset has one row per ball. Splitting those rows at random puts balls from
+the *same match* on both sides of the split, and consecutive balls of a chase are
+nearly identical: 42 needed off 30 with 5 wickets, then 40 off 29 with 5 wickets.
+The model can effectively recognise matches it trained on, so the test score
+measures memorisation as much as skill.
+
+Running the same model and features under three different splits shows the size
+of the effect:
+
+| Split | ROC-AUC | What it measures |
+| --- | --- | --- |
+| Row-random (the leaky one) | 0.8872 | Balls from one match appear in train *and* test |
+| Match-grouped | 0.8416 | Whole matches held out, seasons mixed |
+| **Season-based (shipped)** | **0.8228** | Train 2008–2017, test 2018–2019 |
+
+The season split is the one that matches how the model is actually used —
+predicting matches that had not happened when it was trained — so that is the
+number this project reports. `python src/train_model.py` prints all three.
+
+**The 6.4-point gap is the cost of the leak.** A model chosen or tuned against
+the 0.887 figure would have been optimised against a number that does not exist
+in deployment.
 
 ## Project structure
 
