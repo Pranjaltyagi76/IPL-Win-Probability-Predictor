@@ -7,6 +7,12 @@ Estimate the batting team's chance of winning at any point of an IPL second-inni
 chase, and replay how that probability moved across a real match — ball by ball,
 the way broadcast win-probability graphics do.
 
+![Win probability across the 2008 IPL final](reports/replay_2008_final.png)
+
+*The 2008 final, replayed by the model. Rajasthan Royals dip to 31% after early
+wickets, recover, and win off the last ball — the curve crosses the 50% line 14
+times. This is the app's default view.*
+
 ---
 
 ## Contents
