@@ -23,6 +23,7 @@ times. This is the app's default view.*
 - [How it works](#how-it-works)
 - [Results](#results)
 - [Why the reported accuracy dropped](#why-the-reported-accuracy-dropped)
+- [Deployment](#deployment)
 - [Project structure](#project-structure)
 - [Tests and CI](#tests-and-ci)
 - [Dataset](#dataset)
@@ -176,6 +177,20 @@ number this project reports. `python src/train_model.py` prints all three.
 **The 6.4-point gap is the cost of the leak.** A model chosen or tuned against
 the 0.887 figure would have been optimised against a number that does not exist
 in deployment.
+
+## Deployment
+
+The repository is ready to deploy on [Streamlit Community
+Cloud](https://share.streamlit.io) with no extra configuration:
+
+1. Sign in with GitHub and choose **New app**.
+2. Select this repository, branch `main`, main file `app.py`.
+3. Deploy.
+
+`requirements.txt` is installed automatically, `.streamlit/config.toml` supplies
+the theme, and the model trains itself on first boot (about a second) because
+`pipe.pkl` is not committed. The bundled CSVs mean there is no external data
+dependency to configure.
 
 ## Project structure
 
