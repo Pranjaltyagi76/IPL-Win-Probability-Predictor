@@ -1,109 +1,117 @@
 # IPL Win Probability Predictor
 
 [![CI](https://github.com/Pranjaltyagi76/IPL-Win-Probability-Predictor/actions/workflows/ci.yml/badge.svg)](https://github.com/Pranjaltyagi76/IPL-Win-Probability-Predictor/actions/workflows/ci.yml)
+![Python](https://img.shields.io/badge/python-3.12-blue)
 
-This project predicts the win probability of the batting team during the second innings of an IPL match based on the current match situation.
+Estimate the batting team's chance of winning at any point of an IPL second-innings
+chase, and replay how that probability moved across a real match — ball by ball,
+the way broadcast win-probability graphics do.
 
-It demonstrates a complete end-to-end machine learning workflow, starting from raw IPL ball-by-ball data to a deployed interactive web application.
+---
 
-Project Overview
+## Contents
 
-Uses historical IPL match and delivery data
+- [What this does](#what-this-does)
+- [Features](#features)
+- [How it works](#how-it-works)
+- [Project structure](#project-structure)
+- [Tests and CI](#tests-and-ci)
+- [Dataset](#dataset)
+- [Author](#author)
 
-Focuses on second-innings chases where the target score is known
+---
 
-Generates match-state features such as:
+## What this does
 
-Runs left
+Given a live match state — teams, venue, target, runs scored, balls remaining and
+wickets in hand — the model returns the probability that the chasing side wins.
 
-Balls remaining
+Two things separate this from a standard "fit a classifier, show a number" project:
 
-Wickets in hand
+1. **The evaluation is honest.** Splitting ball-by-ball rows at random leaks the
+   same match into train and test and inflates the score. This project splits by
+   season instead, and reports the lower, deployment-realistic number.
+2. **Every prediction is explainable.** The app breaks each estimate into the
+   individual factors pushing the win probability up or down.
 
-Current Run Rate (CRR)
+## Features
 
-Required Run Rate (RRR)
+- **Match replay** — pick any of 625 historical chases and see the win-probability
+  curve across the whole innings, annotated with wickets, fours and sixes.
+- **Manual prediction** — enter a hypothetical match state and get an estimate.
+- **Per-prediction explanations** — the top factors helping and hurting the
+  batting team, as plain English plus a contribution chart.
+- **Terminal-state handling** — an all-out side is shown 0%, a completed chase
+  100%, instead of whatever the model happens to output.
+- **Calibration reporting** — Brier score and reliability diagrams, not just
+  ROC-AUC.
 
-Trains a Logistic Regression model to estimate win probability
+## How it works
 
-Deploys the trained model using a Streamlit web interface
+### Feature engineering
 
-Includes visualizations for better interpretation of predictions
+`src/feature_engineering.py` merges the match and ball-by-ball tables, filters to
+the eight canonical franchises and non-DLS matches, and derives the match state at
+every delivery of the second innings:
 
-# Approach
-# Feature Engineering
+| Feature | Meaning |
+| --- | --- |
+| `runs_left` | Runs still required |
+| `balls_left` | Balls remaining in the innings |
+| `wickets` | Wickets in hand |
+| `target` | First-innings run total |
+| `crr` | Current run rate |
+| `rrr` | Required run rate |
+| `batting_team`, `bowling_team`, `city` | Categorical context |
 
-Merged match-level and ball-by-ball datasets
+The label is whether the batting team went on to win.
 
-Filtered inconsistent and DLS-affected matches
+### Model
 
-Computed real-time match features for each delivery
+A scikit-learn `Pipeline`: one-hot encoding for the categorical columns, standard
+scaling for the numeric ones, and logistic regression on top. The pipeline is
+serialised to `pipe.pkl`, which is generated rather than committed — the app
+trains it automatically on first run.
 
-Created a clean training dataset focused on second innings
+## Project structure
 
-# Model Training
-
-Built an sklearn Pipeline combining:
-
-One-Hot Encoding for categorical features
-
-Logistic Regression for probabilistic prediction
-
-Evaluated the model using ROC-AUC (~0.88 on test data)
-
-Saved the trained pipeline as a serialized file (pipe.pkl)
-
-# Deployment
-
-Loaded the trained model for inference only (no retraining)
-
-Built an interactive Streamlit app
-
-Automatically calculates CRR and RRR from user inputs
-
-Displays win probabilities along with supporting visualizations
-
-Application Features
-
-Real-time win probability prediction
-
-Automatic run rate calculations
-
-Match summary and validation checks
-
-# Visualizations:
-
-CRR vs RRR comparison
-
-Team-wise win probability bar chart
-
-Match pressure snapshot (runs vs balls remaining)
-
-# Project Structure
 ```text
-IPL WIN PREDICTOR/
+IPL-Win-Probability-Predictor/
 │
-├── app.py
-├── README.md
+├── app.py                     # Streamlit app (replay + manual modes)
 ├── requirements.txt
 │
 ├── data/
 │   ├── matches.csv
 │   └── deliveries.csv
 │
-└── src/
-    ├── feature_engineering.py
-    └── train_model.py
+├── src/
+│   ├── feature_engineering.py # Raw CSVs -> per-ball training rows
+│   ├── train_model.py         # Split comparison + trains the shipped model
+│   ├── predict.py             # Inference, terminal-state guards, explanations
+│   ├── replay.py              # Ball-by-ball win-probability curves
+│   └── evaluate.py            # ROC-AUC, Brier, calibration, per-phase scores
+│
+├── tests/                     # pytest suite
+└── .github/workflows/ci.yml   # Runs the suite on every push and PR
 ```
 
-If this project impressed you, consider giving it a ⭐
+## Tests and CI
 
-# Dataset
+A pytest suite covers data integrity (no negative `runs_left`, valid ranges, no
+missing or infinite features), prediction validity (probabilities stay in
+`[0, 1]`), cricketing sanity (win probability rises as runs needed fall and as
+wickets in hand increase), and the terminal-state guards.
 
-IPL dataset sourced from Kaggle:
-https://www.kaggle.com/datasets/ramjidoolla/ipl-data-set
+GitHub Actions runs the suite on every push and pull request to `main`.
 
-# Author
+## Dataset
 
-Pranjal Tyagi
-B.Tech CSE (AI & DS)
+IPL ball-by-ball data (2008–2019) from Kaggle:
+<https://www.kaggle.com/datasets/ramjidoolla/ipl-data-set>
+
+## Author
+
+**Pranjal Tyagi** — B.Tech CSE (AI & DS)
+
+If this project was useful to you, consider giving it a ⭐
