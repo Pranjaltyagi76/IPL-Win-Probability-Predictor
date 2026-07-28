@@ -9,7 +9,7 @@ Because we output a win probability, accuracy is the wrong lens. This script:
   4. Reports per-phase Brier score (powerplay / middle / death overs) to show
      where the model is weakest.
 
-Run from the src/ directory:  python evaluate.py
+Run from anywhere:  python src/evaluate.py
 """
 
 import os
@@ -24,9 +24,12 @@ from sklearn.calibration import CalibratedClassifierCV, calibration_curve
 from sklearn.metrics import roc_auc_score, brier_score_loss
 
 from feature_engineering import prepare_dataset
-from train_model import build_pipeline, time_split
+from train_model import (
+    build_pipeline, time_split, DEFAULT_MATCHES, DEFAULT_DELIVERIES,
+)
 
-REPORTS_DIR = "../reports"
+# Resolved relative to this file so the script runs from any directory.
+REPORTS_DIR = os.path.join(os.path.dirname(__file__), os.pardir, "reports")
 
 
 def phase(balls_left):
@@ -40,7 +43,7 @@ def phase(balls_left):
 
 def main():
     os.makedirs(REPORTS_DIR, exist_ok=True)
-    df = prepare_dataset('../data/matches.csv', '../data/deliveries.csv')
+    df = prepare_dataset(DEFAULT_MATCHES, DEFAULT_DELIVERIES)
     X_train, X_test, y_train, y_test = time_split(df)
 
     models = {
