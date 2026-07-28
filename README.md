@@ -15,6 +15,7 @@ the way broadcast win-probability graphics do.
 - [Quickstart](#quickstart)
 - [Features](#features)
 - [How it works](#how-it-works)
+- [Results](#results)
 - [Why the reported accuracy dropped](#why-the-reported-accuracy-dropped)
 - [Project structure](#project-structure)
 - [Tests and CI](#tests-and-ci)
@@ -95,6 +96,51 @@ A scikit-learn `Pipeline`: one-hot encoding for the categorical columns, standar
 scaling for the numeric ones, and logistic regression on top. The pipeline is
 serialised to `pipe.pkl`, which is generated rather than committed — the app
 trains it automatically on first run.
+
+## Results
+
+All figures below are on the season-based test set (2018–2019), produced by
+`python src/evaluate.py`.
+
+Because the output is a probability, ROC-AUC alone is not enough — it only
+measures ranking. **Brier score** (mean squared error of the predicted
+probability, lower is better) measures whether the numbers themselves are
+trustworthy.
+
+| Model | ROC-AUC | Brier | Brier (calibrated) |
+| --- | --- | --- | --- |
+| **Logistic Regression** | **0.8228** | **0.1848** | **0.1771** |
+| Gradient Boosting | 0.7836 | 0.2353 | 0.1992 |
+
+Logistic regression wins on both ranking and probability quality, so the simpler
+and more interpretable model is also the better one here — that is why it ships.
+Isotonic calibration improves it further (0.1848 → 0.1771).
+
+### Where the model is weakest
+
+| Innings phase | Brier |
+| --- | --- |
+| Powerplay (ov 1–6) | 0.2409 |
+| Middle (ov 7–15) | 0.1729 |
+| Death (ov 16–20) | 0.1268 |
+
+The model is least reliable early and sharpest at the death, which is expected:
+genuine uncertainty collapses as a chase runs out of balls.
+
+### Calibration reveals a distribution shift
+
+![Reliability diagram](reports/calibration.png)
+
+The reliability curve sits **above** the diagonal at the low end — when the model
+says 15%, chasing teams actually won about 44% of the time. It is systematically
+under-rating the chasing side.
+
+The season split explains why. Chases succeeded **53.3%** of the time in the
+training seasons (2008–2017) but **57.3%** in the test seasons (2018–2019), so a
+model fitted on the earlier era carries its pessimism forward.
+
+This is the point of a time-based split: a random split would have hidden the
+shift by mixing both eras into training.
 
 ## Why the reported accuracy dropped
 
