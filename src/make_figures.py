@@ -41,9 +41,9 @@ STYLE = {
 def replay_figure(pipe, matches, deliveries, match_id=FEATURED_MATCH_ID):
     """The ball-by-ball win-probability curve, as shown in the app."""
     curve = win_probability_curve(pipe, match_id, matches, deliveries)
-    info = matches[matches["id"] == match_id].iloc[0]
+    info = matches[matches["match_id"] == match_id].iloc[0]
     chaser = deliveries[
-        (deliveries["match_id"] == match_id) & (deliveries["inning"] == 2)
+        (deliveries["match_id"] == match_id) & (deliveries["innings"] == 2)
     ]["batting_team"].iloc[0]
 
     fig, ax = plt.subplots(figsize=(10, 4.2))
@@ -66,7 +66,7 @@ def replay_figure(pipe, matches, deliveries, match_id=FEATURED_MATCH_ID):
 
     ax.legend(loc="lower left", ncol=3, fontsize=8, framealpha=0.9)
     ax.set_title(
-        f"{info['team1']} vs {info['team2']} — {info['Season']} "
+        f"{info['team1']} vs {info['team2']} — IPL {info['season']} "
         f"({info['city']})",
         fontsize=11,
     )
@@ -86,7 +86,7 @@ def main():
     matches, deliveries = load_data(DEFAULT_MATCHES, DEFAULT_DELIVERIES)
 
     fig = replay_figure(pipe, matches, deliveries)
-    out = os.path.join(REPORTS_DIR, "replay_2008_final.png")
+    out = os.path.join(REPORTS_DIR, "replay_featured.png")
     fig.savefig(out, dpi=130)
     print("Saved", os.path.normpath(out))
 

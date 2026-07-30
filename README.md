@@ -7,11 +7,12 @@ Estimate the batting team's chance of winning at any point of an IPL second-inni
 chase, and replay how that probability moved across a real match — ball by ball,
 the way broadcast win-probability graphics do.
 
-![Win probability across the 2008 IPL final](reports/replay_2008_final.png)
+![Win probability across a 2024 IPL chase](reports/replay_featured.png)
 
-*The 2008 final, replayed by the model. Rajasthan Royals dip to 31% after early
-wickets, recover, and win off the last ball — the curve crosses the 50% line 14
-times. This is the app's default view.*
+*Punjab Kings vs Royal Challengers Bengaluru, 2024 — the most volatile chase in
+the dataset. RCB sit on a knife edge for most of the innings, collapse to 19%
+after losing wickets in the 17th over, then win it. The curve crosses the 50%
+line 17 times. This is the app's default view.*
 
 ---
 
@@ -60,14 +61,16 @@ above is all you need.
 Optional commands, all runnable from the repository root:
 
 ```bash
-python src/train_model.py   # retrain, and print the split comparison
-python src/evaluate.py      # ROC-AUC, Brier, calibration, per-phase scores
-pytest -q                   # run the test suite
+python src/train_model.py    # retrain, and print the split comparison
+python src/evaluate.py       # ROC-AUC, Brier, calibration, per-phase scores
+python src/build_dataset.py  # rebuild the dataset from Cricsheet
+python src/make_figures.py   # regenerate the figures in this README
+pytest -q                    # run the test suite
 ```
 
 ## Features
 
-- **Match replay** — pick any of 625 historical chases and see the win-probability
+- **Match replay** — pick any of 1,195 historical chases and see the win-probability
   curve across the whole innings, annotated with wickets, fours and sixes.
 - **Manual prediction** — enter a hypothetical match state and get an estimate.
 - **Per-prediction explanations** — the top factors helping and hurting the
@@ -82,7 +85,7 @@ pytest -q                   # run the test suite
 ### Feature engineering
 
 `src/feature_engineering.py` merges the match and ball-by-ball tables, filters to
-the eight canonical franchises and non-DLS matches, and derives the match state at
+all 15 franchises and non-DLS matches, and derives the match state at
 every delivery of the second innings:
 
 | Feature | Meaning |
@@ -207,15 +210,17 @@ IPL-Win-Probability-Predictor/
 ├── requirements.txt
 │
 ├── data/
-│   ├── matches.csv
-│   └── deliveries.csv
+│   ├── matches_all.csv        # One row per match (2008-2026)
+│   └── deliveries_all.csv.gz  # One row per delivery, gzipped
 │
 ├── src/
-│   ├── feature_engineering.py # Raw CSVs -> per-ball training rows
+│   ├── build_dataset.py       # Cricsheet -> the canonical dataset above
+│   ├── feature_engineering.py # Canonical data -> per-ball training rows
 │   ├── train_model.py         # Split comparison + trains the shipped model
 │   ├── predict.py             # Inference, terminal-state guards, explanations
 │   ├── replay.py              # Ball-by-ball win-probability curves
-│   └── evaluate.py            # ROC-AUC, Brier, calibration, per-phase scores
+│   ├── evaluate.py            # ROC-AUC, Brier, calibration, per-phase scores
+│   └── make_figures.py        # Regenerates the figures in this README
 │
 ├── tests/                     # pytest suite
 └── .github/workflows/ci.yml   # Runs the suite on every push and PR
@@ -223,17 +228,43 @@ IPL-Win-Probability-Predictor/
 
 ## Tests and CI
 
-A pytest suite covers data integrity (no negative `runs_left`, valid ranges, no
-missing or infinite features), prediction validity (probabilities stay in
-`[0, 1]`), cricketing sanity (win probability rises as runs needed fall and as
-wickets in hand increase), and the terminal-state guards.
+A pytest suite covers dataset schema and coverage (expected columns, no missing
+city, contiguous seasons, a full innings containing exactly 120 legal
+deliveries), data integrity of the feature frame (valid ranges, nothing missing
+or infinite), prediction validity (probabilities stay in `[0, 1]`), cricketing
+sanity (win probability rises as runs needed fall and as wickets in hand
+increase), and the terminal-state guards.
+
+The coverage check exists because of a real bug: 51 matches recorded a blank
+city, which silently removed 48 of them from training. The test now fails if any
+season contributes less than half the median number of rows.
 
 GitHub Actions runs the suite on every push and pull request to `main`.
 
 ## Dataset
 
-IPL ball-by-ball data (2008–2019) from Kaggle:
-<https://www.kaggle.com/datasets/ramjidoolla/ipl-data-set>
+Ball-by-ball data for **1,243 matches across the 2008–2026 seasons**, from
+[Cricsheet](https://cricsheet.org/), used under the Open Data Commons
+Attribution License.
+
+`src/build_dataset.py` downloads the upstream archive and reduces it to the two
+files in `data/`, resolving a few things the raw feed leaves messy:
+
+- Season labels are inconsistent (`2007/08`, `2020/21`), so the season is taken
+  from the match date.
+- Wides and no-balls are flagged so they never advance the balls-bowled count.
+- `retired hurt` is excluded from wickets; it is not a dismissal.
+- The 51 UAE matches that record a blank city have it recovered from the venue.
+- The four genuine franchise renames are collapsed (Delhi Daredevils → Delhi
+  Capitals, Kings XI Punjab → Punjab Kings, Royal Challengers Bangalore →
+  Bengaluru, and a Rising Pune spelling change). Terminated franchises such as
+  Deccan Chargers and Gujarat Lions are deliberately kept separate.
+
+Regenerate it at any time — including after a new season — with:
+
+```bash
+python src/build_dataset.py --force-download
+```
 
 ## Author
 
