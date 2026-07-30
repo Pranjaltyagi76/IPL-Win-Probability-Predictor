@@ -398,25 +398,25 @@ match_id,date,city,venue,team1,team2,winner,target,dls,outcome,eliminator,player
 598072,2013-05-24,Kolkata,Eden Gardens,Mumbai Indians,Rajasthan Royals,Mumbai Indians,166.0,0,,,Harbhajan Singh,2013
 598073,2013-05-26,Kolkata,Eden Gardens,Chennai Super Kings,Mumbai Indians,Mumbai Indians,149.0,0,,,KA Pollard,2013
 729279,2014-04-16,Abu Dhabi,Sheikh Zayed Stadium,Mumbai Indians,Kolkata Knight Riders,Kolkata Knight Riders,164.0,0,,,JH Kallis,2014
-729281,2014-04-17,,Sharjah Cricket Stadium,Delhi Capitals,Royal Challengers Bengaluru,Royal Challengers Bengaluru,146.0,0,,,YS Chahal,2014
+729281,2014-04-17,Sharjah,Sharjah Cricket Stadium,Delhi Capitals,Royal Challengers Bengaluru,Royal Challengers Bengaluru,146.0,0,,,YS Chahal,2014
 729283,2014-04-18,Abu Dhabi,Sheikh Zayed Stadium,Chennai Super Kings,Punjab Kings,Punjab Kings,206.0,0,,,GJ Maxwell,2014
 729285,2014-04-18,Abu Dhabi,Sheikh Zayed Stadium,Sunrisers Hyderabad,Rajasthan Royals,Rajasthan Royals,134.0,0,,,AM Rahane,2014
-729287,2014-04-19,,Dubai International Cricket Stadium,Royal Challengers Bengaluru,Mumbai Indians,Royal Challengers Bengaluru,116.0,0,,,PA Patel,2014
-729289,2014-04-19,,Dubai International Cricket Stadium,Kolkata Knight Riders,Delhi Capitals,Delhi Capitals,167.0,0,,,JP Duminy,2014
-729291,2014-04-20,,Sharjah Cricket Stadium,Rajasthan Royals,Punjab Kings,Punjab Kings,192.0,0,,,GJ Maxwell,2014
+729287,2014-04-19,Dubai,Dubai International Cricket Stadium,Royal Challengers Bengaluru,Mumbai Indians,Royal Challengers Bengaluru,116.0,0,,,PA Patel,2014
+729289,2014-04-19,Dubai,Dubai International Cricket Stadium,Kolkata Knight Riders,Delhi Capitals,Delhi Capitals,167.0,0,,,JP Duminy,2014
+729291,2014-04-20,Sharjah,Sharjah Cricket Stadium,Rajasthan Royals,Punjab Kings,Punjab Kings,192.0,0,,,GJ Maxwell,2014
 729293,2014-04-21,Abu Dhabi,Sheikh Zayed Stadium,Chennai Super Kings,Delhi Capitals,Chennai Super Kings,178.0,0,,,SK Raina,2014
-729295,2014-04-22,,Sharjah Cricket Stadium,Punjab Kings,Sunrisers Hyderabad,Punjab Kings,194.0,0,,,GJ Maxwell,2014
-729297,2014-04-23,,Dubai International Cricket Stadium,Rajasthan Royals,Chennai Super Kings,Chennai Super Kings,141.0,0,,,RA Jadeja,2014
-729299,2014-04-24,,Sharjah Cricket Stadium,Royal Challengers Bengaluru,Kolkata Knight Riders,Kolkata Knight Riders,151.0,0,,,CA Lynn,2014
-729301,2014-04-25,,Dubai International Cricket Stadium,Sunrisers Hyderabad,Delhi Capitals,Sunrisers Hyderabad,185.0,0,,,AJ Finch,2014
-729303,2014-04-25,,Dubai International Cricket Stadium,Chennai Super Kings,Mumbai Indians,Chennai Super Kings,142.0,0,,,MM Sharma,2014
+729295,2014-04-22,Sharjah,Sharjah Cricket Stadium,Punjab Kings,Sunrisers Hyderabad,Punjab Kings,194.0,0,,,GJ Maxwell,2014
+729297,2014-04-23,Dubai,Dubai International Cricket Stadium,Rajasthan Royals,Chennai Super Kings,Chennai Super Kings,141.0,0,,,RA Jadeja,2014
+729299,2014-04-24,Sharjah,Sharjah Cricket Stadium,Royal Challengers Bengaluru,Kolkata Knight Riders,Kolkata Knight Riders,151.0,0,,,CA Lynn,2014
+729301,2014-04-25,Dubai,Dubai International Cricket Stadium,Sunrisers Hyderabad,Delhi Capitals,Sunrisers Hyderabad,185.0,0,,,AJ Finch,2014
+729303,2014-04-25,Dubai,Dubai International Cricket Stadium,Chennai Super Kings,Mumbai Indians,Chennai Super Kings,142.0,0,,,MM Sharma,2014
 729305,2014-04-26,Abu Dhabi,Sheikh Zayed Stadium,Rajasthan Royals,Royal Challengers Bengaluru,Rajasthan Royals,71.0,0,,,PV Tambe,2014
 729307,2014-04-26,Abu Dhabi,Sheikh Zayed Stadium,Kolkata Knight Riders,Punjab Kings,Punjab Kings,133.0,0,,,Sandeep Sharma,2014
-729309,2014-04-27,,Sharjah Cricket Stadium,Delhi Capitals,Mumbai Indians,Delhi Capitals,126.0,0,,,M Vijay,2014
-729311,2014-04-27,,Sharjah Cricket Stadium,Sunrisers Hyderabad,Chennai Super Kings,Chennai Super Kings,146.0,0,,,DR Smith,2014
-729313,2014-04-28,,Dubai International Cricket Stadium,Punjab Kings,Royal Challengers Bengaluru,Punjab Kings,125.0,0,,,Sandeep Sharma,2014
+729309,2014-04-27,Sharjah,Sharjah Cricket Stadium,Delhi Capitals,Mumbai Indians,Delhi Capitals,126.0,0,,,M Vijay,2014
+729311,2014-04-27,Sharjah,Sharjah Cricket Stadium,Sunrisers Hyderabad,Chennai Super Kings,Chennai Super Kings,146.0,0,,,DR Smith,2014
+729313,2014-04-28,Dubai,Dubai International Cricket Stadium,Punjab Kings,Royal Challengers Bengaluru,Punjab Kings,125.0,0,,,Sandeep Sharma,2014
 729315,2014-04-29,Abu Dhabi,Sheikh Zayed Stadium,Kolkata Knight Riders,Rajasthan Royals,,153.0,0,tie,Rajasthan Royals,JP Faulkner,2014
-729317,2014-04-30,,Dubai International Cricket Stadium,Mumbai Indians,Sunrisers Hyderabad,Sunrisers Hyderabad,173.0,0,,,B Kumar,2014
+729317,2014-04-30,Dubai,Dubai International Cricket Stadium,Mumbai Indians,Sunrisers Hyderabad,Sunrisers Hyderabad,173.0,0,,,B Kumar,2014
 733971,2014-05-02,Ranchi,JSCA International Stadium Complex,Chennai Super Kings,Kolkata Knight Riders,Chennai Super Kings,149.0,0,,,RA Jadeja,2014
 733973,2014-05-03,Mumbai,Wankhede Stadium,Mumbai Indians,Punjab Kings,Mumbai Indians,169.0,0,,,CJ Anderson,2014
 733975,2014-05-03,Delhi,Feroz Shah Kotla,Delhi Capitals,Rajasthan Royals,Rajasthan Royals,153.0,0,,,KK Nair,2014
@@ -756,65 +756,65 @@ match_id,date,city,venue,team1,team2,winner,target,dls,outcome,eliminator,player
 1181767,2019-05-10,Visakhapatnam,Dr. Y.S. Rajasekhara Reddy ACA-VDCA Cricket Stadium,Delhi Capitals,Chennai Super Kings,Chennai Super Kings,148.0,0,,,F du Plessis,2019
 1181768,2019-05-12,Hyderabad,Rajiv Gandhi International Stadium,Mumbai Indians,Chennai Super Kings,Mumbai Indians,150.0,0,,,JJ Bumrah,2019
 1216492,2020-09-19,Abu Dhabi,Sheikh Zayed Stadium,Mumbai Indians,Chennai Super Kings,Chennai Super Kings,163.0,0,,,AT Rayudu,2020
-1216493,2020-09-20,,Dubai International Cricket Stadium,Delhi Capitals,Punjab Kings,,158.0,0,tie,Delhi Capitals,MP Stoinis,2020
+1216493,2020-09-20,Dubai,Dubai International Cricket Stadium,Delhi Capitals,Punjab Kings,,158.0,0,tie,Delhi Capitals,MP Stoinis,2020
 1216494,2020-10-21,Abu Dhabi,Sheikh Zayed Stadium,Kolkata Knight Riders,Royal Challengers Bengaluru,Royal Challengers Bengaluru,85.0,0,,,Mohammed Siraj,2020
-1216495,2020-11-03,,Sharjah Cricket Stadium,Mumbai Indians,Sunrisers Hyderabad,Sunrisers Hyderabad,150.0,0,,,S Nadeem,2020
-1216496,2020-09-22,,Sharjah Cricket Stadium,Rajasthan Royals,Chennai Super Kings,Rajasthan Royals,217.0,0,,,SV Samson,2020
+1216495,2020-11-03,Sharjah,Sharjah Cricket Stadium,Mumbai Indians,Sunrisers Hyderabad,Sunrisers Hyderabad,150.0,0,,,S Nadeem,2020
+1216496,2020-09-22,Sharjah,Sharjah Cricket Stadium,Rajasthan Royals,Chennai Super Kings,Rajasthan Royals,217.0,0,,,SV Samson,2020
 1216497,2020-10-24,Abu Dhabi,Sheikh Zayed Stadium,Kolkata Knight Riders,Delhi Capitals,Kolkata Knight Riders,195.0,0,,,CV Varun,2020
-1216498,2020-10-24,,Dubai International Cricket Stadium,Punjab Kings,Sunrisers Hyderabad,Punjab Kings,127.0,0,,,CJ Jordan,2020
+1216498,2020-10-24,Dubai,Dubai International Cricket Stadium,Punjab Kings,Sunrisers Hyderabad,Punjab Kings,127.0,0,,,CJ Jordan,2020
 1216499,2020-10-28,Abu Dhabi,Sheikh Zayed Stadium,Royal Challengers Bengaluru,Mumbai Indians,Mumbai Indians,165.0,0,,,SA Yadav,2020
-1216500,2020-10-09,,Sharjah Cricket Stadium,Delhi Capitals,Rajasthan Royals,Delhi Capitals,185.0,0,,,R Ashwin,2020
+1216500,2020-10-09,Sharjah,Sharjah Cricket Stadium,Delhi Capitals,Rajasthan Royals,Delhi Capitals,185.0,0,,,R Ashwin,2020
 1216501,2020-10-07,Abu Dhabi,Sheikh Zayed Stadium,Kolkata Knight Riders,Chennai Super Kings,Kolkata Knight Riders,168.0,0,,,RA Tripathi,2020
-1216502,2020-10-31,,Sharjah Cricket Stadium,Royal Challengers Bengaluru,Sunrisers Hyderabad,Sunrisers Hyderabad,121.0,0,,,Sandeep Sharma,2020
+1216502,2020-10-31,Sharjah,Sharjah Cricket Stadium,Royal Challengers Bengaluru,Sunrisers Hyderabad,Sunrisers Hyderabad,121.0,0,,,Sandeep Sharma,2020
 1216503,2020-10-01,Abu Dhabi,Sheikh Zayed Stadium,Mumbai Indians,Punjab Kings,Mumbai Indians,192.0,0,,,KA Pollard,2020
-1216504,2020-09-30,,Dubai International Cricket Stadium,Kolkata Knight Riders,Rajasthan Royals,Kolkata Knight Riders,175.0,0,,,Shivam Mavi,2020
+1216504,2020-09-30,Dubai,Dubai International Cricket Stadium,Kolkata Knight Riders,Rajasthan Royals,Kolkata Knight Riders,175.0,0,,,Shivam Mavi,2020
 1216505,2020-11-02,Abu Dhabi,Sheikh Zayed Stadium,Royal Challengers Bengaluru,Delhi Capitals,Delhi Capitals,153.0,0,,,A Nortje,2020
 1216506,2020-11-01,Abu Dhabi,Sheikh Zayed Stadium,Punjab Kings,Chennai Super Kings,Chennai Super Kings,154.0,0,,,RD Gaikwad,2020
-1216507,2020-10-11,,Dubai International Cricket Stadium,Sunrisers Hyderabad,Rajasthan Royals,Rajasthan Royals,159.0,0,,,R Tewatia,2020
+1216507,2020-10-11,Dubai,Dubai International Cricket Stadium,Sunrisers Hyderabad,Rajasthan Royals,Rajasthan Royals,159.0,0,,,R Tewatia,2020
 1216508,2020-09-23,Abu Dhabi,Sheikh Zayed Stadium,Mumbai Indians,Kolkata Knight Riders,Mumbai Indians,196.0,0,,,RG Sharma,2020
-1216509,2020-10-17,,Sharjah Cricket Stadium,Chennai Super Kings,Delhi Capitals,Delhi Capitals,180.0,0,,,S Dhawan,2020
-1216510,2020-09-24,,Dubai International Cricket Stadium,Punjab Kings,Royal Challengers Bengaluru,Punjab Kings,207.0,0,,,KL Rahul,2020
+1216509,2020-10-17,Sharjah,Sharjah Cricket Stadium,Chennai Super Kings,Delhi Capitals,Delhi Capitals,180.0,0,,,S Dhawan,2020
+1216510,2020-09-24,Dubai,Dubai International Cricket Stadium,Punjab Kings,Royal Challengers Bengaluru,Punjab Kings,207.0,0,,,KL Rahul,2020
 1216511,2020-10-06,Abu Dhabi,Sheikh Zayed Stadium,Mumbai Indians,Rajasthan Royals,Mumbai Indians,194.0,0,,,SA Yadav,2020
 1216512,2020-10-18,Abu Dhabi,Sheikh Zayed Stadium,Kolkata Knight Riders,Sunrisers Hyderabad,,164.0,0,tie,Kolkata Knight Riders,LH Ferguson,2020
-1216513,2020-10-04,,Dubai International Cricket Stadium,Punjab Kings,Chennai Super Kings,Chennai Super Kings,179.0,0,,,SR Watson,2020
+1216513,2020-10-04,Dubai,Dubai International Cricket Stadium,Punjab Kings,Chennai Super Kings,Chennai Super Kings,179.0,0,,,SR Watson,2020
 1216514,2020-10-03,Abu Dhabi,Sheikh Zayed Stadium,Rajasthan Royals,Royal Challengers Bengaluru,Royal Challengers Bengaluru,155.0,0,,,YS Chahal,2020
-1216515,2020-10-03,,Sharjah Cricket Stadium,Delhi Capitals,Kolkata Knight Riders,Delhi Capitals,229.0,0,,,SS Iyer,2020
-1216516,2020-10-02,,Dubai International Cricket Stadium,Sunrisers Hyderabad,Chennai Super Kings,Sunrisers Hyderabad,165.0,0,,,PK Garg,2020
-1216517,2020-10-18,,Dubai International Cricket Stadium,Mumbai Indians,Punjab Kings,,177.0,0,tie,Kings XI Punjab,KL Rahul,2020
-1216518,2020-10-22,,Dubai International Cricket Stadium,Rajasthan Royals,Sunrisers Hyderabad,Sunrisers Hyderabad,155.0,0,,,MK Pandey,2020
-1216519,2020-10-05,,Dubai International Cricket Stadium,Delhi Capitals,Royal Challengers Bengaluru,Delhi Capitals,197.0,0,,,AR Patel,2020
-1216520,2020-10-26,,Sharjah Cricket Stadium,Kolkata Knight Riders,Punjab Kings,Punjab Kings,150.0,0,,,CH Gayle,2020
-1216521,2020-10-23,,Sharjah Cricket Stadium,Chennai Super Kings,Mumbai Indians,Mumbai Indians,115.0,0,,,TA Boult,2020
-1216522,2020-10-17,,Dubai International Cricket Stadium,Rajasthan Royals,Royal Challengers Bengaluru,Royal Challengers Bengaluru,178.0,0,,,AB de Villiers,2020
+1216515,2020-10-03,Sharjah,Sharjah Cricket Stadium,Delhi Capitals,Kolkata Knight Riders,Delhi Capitals,229.0,0,,,SS Iyer,2020
+1216516,2020-10-02,Dubai,Dubai International Cricket Stadium,Sunrisers Hyderabad,Chennai Super Kings,Sunrisers Hyderabad,165.0,0,,,PK Garg,2020
+1216517,2020-10-18,Dubai,Dubai International Cricket Stadium,Mumbai Indians,Punjab Kings,,177.0,0,tie,Kings XI Punjab,KL Rahul,2020
+1216518,2020-10-22,Dubai,Dubai International Cricket Stadium,Rajasthan Royals,Sunrisers Hyderabad,Sunrisers Hyderabad,155.0,0,,,MK Pandey,2020
+1216519,2020-10-05,Dubai,Dubai International Cricket Stadium,Delhi Capitals,Royal Challengers Bengaluru,Delhi Capitals,197.0,0,,,AR Patel,2020
+1216520,2020-10-26,Sharjah,Sharjah Cricket Stadium,Kolkata Knight Riders,Punjab Kings,Punjab Kings,150.0,0,,,CH Gayle,2020
+1216521,2020-10-23,Sharjah,Sharjah Cricket Stadium,Chennai Super Kings,Mumbai Indians,Mumbai Indians,115.0,0,,,TA Boult,2020
+1216522,2020-10-17,Dubai,Dubai International Cricket Stadium,Rajasthan Royals,Royal Challengers Bengaluru,Royal Challengers Bengaluru,178.0,0,,,AB de Villiers,2020
 1216523,2020-10-10,Abu Dhabi,Sheikh Zayed Stadium,Kolkata Knight Riders,Punjab Kings,Kolkata Knight Riders,165.0,0,,,KD Karthik,2020
-1216524,2020-10-27,,Dubai International Cricket Stadium,Sunrisers Hyderabad,Delhi Capitals,Sunrisers Hyderabad,220.0,0,,,WP Saha,2020
-1216525,2020-10-10,,Dubai International Cricket Stadium,Royal Challengers Bengaluru,Chennai Super Kings,Royal Challengers Bengaluru,170.0,0,,,V Kohli,2020
+1216524,2020-10-27,Dubai,Dubai International Cricket Stadium,Sunrisers Hyderabad,Delhi Capitals,Sunrisers Hyderabad,220.0,0,,,WP Saha,2020
+1216525,2020-10-10,Dubai,Dubai International Cricket Stadium,Royal Challengers Bengaluru,Chennai Super Kings,Royal Challengers Bengaluru,170.0,0,,,V Kohli,2020
 1216526,2020-10-16,Abu Dhabi,Sheikh Zayed Stadium,Kolkata Knight Riders,Mumbai Indians,Mumbai Indians,149.0,0,,,Q de Kock,2020
-1216527,2020-09-27,,Sharjah Cricket Stadium,Punjab Kings,Rajasthan Royals,Rajasthan Royals,224.0,0,,,SV Samson,2020
-1216528,2020-10-13,,Dubai International Cricket Stadium,Chennai Super Kings,Sunrisers Hyderabad,Chennai Super Kings,168.0,0,,,RA Jadeja,2020
+1216527,2020-09-27,Sharjah,Sharjah Cricket Stadium,Punjab Kings,Rajasthan Royals,Rajasthan Royals,224.0,0,,,SV Samson,2020
+1216528,2020-10-13,Dubai,Dubai International Cricket Stadium,Chennai Super Kings,Sunrisers Hyderabad,Chennai Super Kings,168.0,0,,,RA Jadeja,2020
 1216529,2020-10-11,Abu Dhabi,Sheikh Zayed Stadium,Delhi Capitals,Mumbai Indians,Mumbai Indians,163.0,0,,,Q de Kock,2020
-1216530,2020-11-01,,Dubai International Cricket Stadium,Kolkata Knight Riders,Rajasthan Royals,Kolkata Knight Riders,192.0,0,,,PJ Cummins,2020
-1216531,2020-10-15,,Sharjah Cricket Stadium,Royal Challengers Bengaluru,Punjab Kings,Punjab Kings,172.0,0,,,KL Rahul,2020
+1216530,2020-11-01,Dubai,Dubai International Cricket Stadium,Kolkata Knight Riders,Rajasthan Royals,Kolkata Knight Riders,192.0,0,,,PJ Cummins,2020
+1216531,2020-10-15,Sharjah,Sharjah Cricket Stadium,Royal Challengers Bengaluru,Punjab Kings,Punjab Kings,172.0,0,,,KL Rahul,2020
 1216532,2020-09-29,Abu Dhabi,Sheikh Zayed Stadium,Sunrisers Hyderabad,Delhi Capitals,Sunrisers Hyderabad,163.0,0,,,Rashid Khan,2020
 1216533,2020-10-19,Abu Dhabi,Sheikh Zayed Stadium,Chennai Super Kings,Rajasthan Royals,Rajasthan Royals,126.0,0,,,JC Buttler,2020
-1216534,2020-09-21,,Dubai International Cricket Stadium,Royal Challengers Bengaluru,Sunrisers Hyderabad,Royal Challengers Bengaluru,164.0,0,,,YS Chahal,2020
-1216535,2020-10-31,,Dubai International Cricket Stadium,Delhi Capitals,Mumbai Indians,Mumbai Indians,111.0,0,,,Ishan Kishan,2020
-1216536,2020-10-29,,Dubai International Cricket Stadium,Kolkata Knight Riders,Chennai Super Kings,Chennai Super Kings,173.0,0,,,RD Gaikwad,2020
+1216534,2020-09-21,Dubai,Dubai International Cricket Stadium,Royal Challengers Bengaluru,Sunrisers Hyderabad,Royal Challengers Bengaluru,164.0,0,,,YS Chahal,2020
+1216535,2020-10-31,Dubai,Dubai International Cricket Stadium,Delhi Capitals,Mumbai Indians,Mumbai Indians,111.0,0,,,Ishan Kishan,2020
+1216536,2020-10-29,Dubai,Dubai International Cricket Stadium,Kolkata Knight Riders,Chennai Super Kings,Chennai Super Kings,173.0,0,,,RD Gaikwad,2020
 1216537,2020-10-30,Abu Dhabi,Sheikh Zayed Stadium,Punjab Kings,Rajasthan Royals,Rajasthan Royals,186.0,0,,,BA Stokes,2020
-1216538,2020-10-04,,Sharjah Cricket Stadium,Mumbai Indians,Sunrisers Hyderabad,Mumbai Indians,209.0,0,,,TA Boult,2020
-1216539,2020-09-25,,Dubai International Cricket Stadium,Delhi Capitals,Chennai Super Kings,Delhi Capitals,176.0,0,,,PP Shaw,2020
-1216540,2020-10-12,,Sharjah Cricket Stadium,Royal Challengers Bengaluru,Kolkata Knight Riders,Royal Challengers Bengaluru,195.0,0,,,AB de Villiers,2020
+1216538,2020-10-04,Sharjah,Sharjah Cricket Stadium,Mumbai Indians,Sunrisers Hyderabad,Mumbai Indians,209.0,0,,,TA Boult,2020
+1216539,2020-09-25,Dubai,Dubai International Cricket Stadium,Delhi Capitals,Chennai Super Kings,Delhi Capitals,176.0,0,,,PP Shaw,2020
+1216540,2020-10-12,Sharjah,Sharjah Cricket Stadium,Royal Challengers Bengaluru,Kolkata Knight Riders,Royal Challengers Bengaluru,195.0,0,,,AB de Villiers,2020
 1216541,2020-10-25,Abu Dhabi,Sheikh Zayed Stadium,Mumbai Indians,Rajasthan Royals,Rajasthan Royals,196.0,0,,,BA Stokes,2020
-1216542,2020-10-08,,Dubai International Cricket Stadium,Sunrisers Hyderabad,Punjab Kings,Sunrisers Hyderabad,202.0,0,,,JM Bairstow,2020
-1216543,2020-10-14,,Dubai International Cricket Stadium,Delhi Capitals,Rajasthan Royals,Delhi Capitals,162.0,0,,,A Nortje,2020
-1216544,2020-10-25,,Dubai International Cricket Stadium,Royal Challengers Bengaluru,Chennai Super Kings,Chennai Super Kings,146.0,0,,,RD Gaikwad,2020
+1216542,2020-10-08,Dubai,Dubai International Cricket Stadium,Sunrisers Hyderabad,Punjab Kings,Sunrisers Hyderabad,202.0,0,,,JM Bairstow,2020
+1216543,2020-10-14,Dubai,Dubai International Cricket Stadium,Delhi Capitals,Rajasthan Royals,Delhi Capitals,162.0,0,,,A Nortje,2020
+1216544,2020-10-25,Dubai,Dubai International Cricket Stadium,Royal Challengers Bengaluru,Chennai Super Kings,Chennai Super Kings,146.0,0,,,RD Gaikwad,2020
 1216545,2020-09-26,Abu Dhabi,Sheikh Zayed Stadium,Sunrisers Hyderabad,Kolkata Knight Riders,Kolkata Knight Riders,143.0,0,,,Shubman Gill,2020
-1216546,2020-10-20,,Dubai International Cricket Stadium,Delhi Capitals,Punjab Kings,Punjab Kings,165.0,0,,,S Dhawan,2020
-1216547,2020-09-28,,Dubai International Cricket Stadium,Royal Challengers Bengaluru,Mumbai Indians,,202.0,0,tie,Royal Challengers Bangalore,AB de Villiers,2020
-1237177,2020-11-05,,Dubai International Cricket Stadium,Mumbai Indians,Delhi Capitals,Mumbai Indians,201.0,0,,,JJ Bumrah,2020
+1216546,2020-10-20,Dubai,Dubai International Cricket Stadium,Delhi Capitals,Punjab Kings,Punjab Kings,165.0,0,,,S Dhawan,2020
+1216547,2020-09-28,Dubai,Dubai International Cricket Stadium,Royal Challengers Bengaluru,Mumbai Indians,,202.0,0,tie,Royal Challengers Bangalore,AB de Villiers,2020
+1237177,2020-11-05,Dubai,Dubai International Cricket Stadium,Mumbai Indians,Delhi Capitals,Mumbai Indians,201.0,0,,,JJ Bumrah,2020
 1237178,2020-11-06,Abu Dhabi,Sheikh Zayed Stadium,Royal Challengers Bengaluru,Sunrisers Hyderabad,Sunrisers Hyderabad,132.0,0,,,KS Williamson,2020
 1237180,2020-11-08,Abu Dhabi,Sheikh Zayed Stadium,Delhi Capitals,Sunrisers Hyderabad,Delhi Capitals,190.0,0,,,MP Stoinis,2020
-1237181,2020-11-10,,Dubai International Cricket Stadium,Delhi Capitals,Mumbai Indians,Mumbai Indians,157.0,0,,,TA Boult,2020
+1237181,2020-11-10,Dubai,Dubai International Cricket Stadium,Delhi Capitals,Mumbai Indians,Mumbai Indians,157.0,0,,,TA Boult,2020
 1254058,2021-04-09,Chennai,"MA Chidambaram Stadium, Chepauk, Chennai",Mumbai Indians,Royal Challengers Bengaluru,Royal Challengers Bengaluru,160.0,0,,,HV Patel,2021
 1254059,2021-04-10,Mumbai,"Wankhede Stadium, Mumbai",Chennai Super Kings,Delhi Capitals,Delhi Capitals,189.0,0,,,S Dhawan,2021
 1254060,2021-04-11,Chennai,"MA Chidambaram Stadium, Chepauk, Chennai",Kolkata Knight Riders,Sunrisers Hyderabad,Kolkata Knight Riders,188.0,0,,,N Rana,2021

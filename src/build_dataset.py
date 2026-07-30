@@ -55,6 +55,15 @@ TEAM_RENAMES = {
 }
 
 
+# Some matches carry no city in the source — the 2014 and 2020 UAE legs, where
+# 51 matches were played at these two grounds. The city is recoverable from the
+# venue name, and without it those matches drop out of training entirely.
+VENUE_CITIES = {
+    "Dubai International Cricket Stadium": "Dubai",
+    "Sharjah Cricket Stadium": "Sharjah",
+}
+
+
 def normalise_teams(df, columns):
     """Apply the franchise rename map to the given team-name columns."""
     for column in columns:
@@ -90,6 +99,12 @@ def parse_info(raw_bytes):
         if len(row) < 3 or row[0] != "info":
             continue
         key, value = row[1], row[2]
+
+        # Some records are present but blank ('info,city,'). Treat those as
+        # missing, otherwise an empty string survives as a real value and
+        # defeats the fallbacks below.
+        if value == "" and key != "team":
+            continue
 
         if key == "team":
             out["teams"].append(value)
@@ -139,6 +154,9 @@ def build_matches(archive):
     # Season labels in the source are inconsistent ('2007/08', '2020/21'), but
     # each maps to exactly one calendar year, so derive it from the date.
     matches["season"] = matches["date"].dt.year
+    matches["city"] = matches["city"].fillna(
+        matches["venue"].map(VENUE_CITIES)
+    )
     matches = normalise_teams(matches, ["team1", "team2", "winner"])
     return matches.sort_values("match_id").reset_index(drop=True)
 
