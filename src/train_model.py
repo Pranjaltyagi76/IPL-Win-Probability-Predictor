@@ -31,8 +31,8 @@ NUMERIC = ['runs_left', 'balls_left', 'wickets', 'target', 'crr', 'rrr']
 # Paths resolved relative to this file so training works from any working
 # directory (the src/ CLI, the repo-root app, or CI).
 _ROOT = os.path.join(os.path.dirname(__file__), os.pardir)
-DEFAULT_MATCHES = os.path.join(_ROOT, 'data', 'matches.csv')
-DEFAULT_DELIVERIES = os.path.join(_ROOT, 'data', 'deliveries.csv')
+DEFAULT_MATCHES = os.path.join(_ROOT, 'data', 'matches_all.csv')
+DEFAULT_DELIVERIES = os.path.join(_ROOT, 'data', 'deliveries_all.csv.gz')
 DEFAULT_MODEL_PATH = os.path.join(_ROOT, 'pipe.pkl')
 
 
