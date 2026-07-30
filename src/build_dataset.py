@@ -144,6 +144,9 @@ def build_matches(archive):
                 # 'no result' / 'tie' when there is no outright winner.
                 "outcome": info.get("outcome"),
                 "eliminator": info.get("eliminator"),
+                # Victory margin: exactly one of these is set for a result.
+                "win_by_runs": info.get("winner_runs"),
+                "win_by_wickets": info.get("winner_wickets"),
                 "player_of_match": info.get("player_of_match"),
             })
 

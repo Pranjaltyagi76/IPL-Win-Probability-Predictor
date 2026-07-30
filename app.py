@@ -1,6 +1,7 @@
 import os
 import sys
 
+import pandas as pd
 import streamlit as st
 import matplotlib.pyplot as plt
 
@@ -232,24 +233,26 @@ def render_replay():
     catalogue = list_matches(matches, deliveries)
     labels = catalogue["label"].tolist()
 
-    # Open on the featured thriller (the 2008 final) if it is available.
-    featured = catalogue.index[catalogue["id"] == FEATURED_MATCH_ID]
+    # Open on the featured thriller if it is available.
+    featured = catalogue.index[catalogue["match_id"] == FEATURED_MATCH_ID]
     default_index = int(featured[0]) if len(featured) else 0
 
     choice = st.selectbox("Select a match", labels, index=default_index)
-    match_id = int(catalogue.loc[catalogue["label"] == choice, "id"].iloc[0])
+    match_id = int(
+        catalogue.loc[catalogue["label"] == choice, "match_id"].iloc[0]
+    )
 
-    info = matches[matches["id"] == match_id].iloc[0]
-    if info["win_by_runs"] > 0:
+    info = matches[matches["match_id"] == match_id].iloc[0]
+    if pd.notna(info["win_by_runs"]):
         margin = f"won by {int(info['win_by_runs'])} runs"
-    elif info["win_by_wickets"] > 0:
+    elif pd.notna(info["win_by_wickets"]):
         margin = f"won by {int(info['win_by_wickets'])} wickets"
     else:
-        margin = "result decided without a standard margin"
+        margin = "won"
 
     st.markdown("### Match Summary")
     st.write(f"""
-- Season: {info['Season']}
+- Season: {info['season']}
 - Teams: {info['team1']} vs {info['team2']}
 - Venue: {info['city']}
 - Result: {info['winner']} {margin}
@@ -263,7 +266,7 @@ def render_replay():
         return
 
     chaser = deliveries[
-        (deliveries["match_id"] == match_id) & (deliveries["inning"] == 2)
+        (deliveries["match_id"] == match_id) & (deliveries["innings"] == 2)
     ]["batting_team"].iloc[0]
 
     st.markdown(f"### Win Probability — {chaser} (chasing)")
