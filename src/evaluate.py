@@ -25,7 +25,8 @@ from sklearn.metrics import roc_auc_score, brier_score_loss
 
 from feature_engineering import prepare_dataset
 from train_model import (
-    build_pipeline, time_split, DEFAULT_MATCHES, DEFAULT_DELIVERIES,
+    build_pipeline, time_split, TEST_SEASON_START,
+    DEFAULT_MATCHES, DEFAULT_DELIVERIES,
 )
 
 # Resolved relative to this file so the script runs from any directory.
@@ -51,7 +52,8 @@ def main():
         "Gradient Boosting": HistGradientBoostingClassifier(random_state=42),
     }
 
-    print("Time-based split (train seasons < 2018, test >= 2018)\n")
+    print(f"Time-based split (train seasons < {TEST_SEASON_START}, "
+          f"test >= {TEST_SEASON_START})\n")
     header = f"{'Model':<26}{'ROC-AUC':>10}{'Brier':>10}{'Brier(cal)':>12}"
     print(header)
     print("-" * len(header))

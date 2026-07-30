@@ -106,7 +106,7 @@ trains it automatically on first run.
 
 ## Results
 
-All figures below are on the season-based test set (2018–2019), produced by
+All figures below are on the season-based test set (2024–2026), produced by
 `python src/evaluate.py`.
 
 Because the output is a probability, ROC-AUC alone is not enough — it only
@@ -116,44 +116,46 @@ trustworthy.
 
 | Model | ROC-AUC | Brier | Brier (calibrated) |
 | --- | --- | --- | --- |
-| **Logistic Regression** | **0.8228** | **0.1848** | **0.1771** |
-| Gradient Boosting | 0.7836 | 0.2353 | 0.1992 |
+| **Logistic Regression** | **0.8637** | **0.1711** | **0.1597** |
+| Gradient Boosting | 0.8459 | 0.1886 | 0.1744 |
 
 Logistic regression wins on both ranking and probability quality, so the simpler
 and more interpretable model is also the better one here — that is why it ships.
-Isotonic calibration improves it further (0.1848 → 0.1771).
+Isotonic calibration improves it further (0.1711 → 0.1597).
 
 ### Where the model is weakest
 
 | Innings phase | Brier |
 | --- | --- |
-| Powerplay (ov 1–6) | 0.2409 |
-| Middle (ov 7–15) | 0.1729 |
-| Death (ov 16–20) | 0.1268 |
+| Powerplay (ov 1–6) | 0.2383 |
+| Middle (ov 7–15) | 0.1548 |
+| Death (ov 16–20) | 0.0958 |
 
 The model is least reliable early and sharpest at the death, which is expected:
 genuine uncertainty collapses as a chase runs out of balls.
 
-### Calibration reveals a distribution shift
+### Calibration: the model is too pessimistic about hard chases
 
 ![Reliability diagram](reports/calibration.png)
 
 The reliability curve sits **above** the diagonal at the low end — when the model
-says 15%, chasing teams actually won about 44% of the time. It is systematically
-under-rating the chasing side.
+says 15%, chasing teams actually won about 37% of the time. It systematically
+under-rates the side batting second when the chase looks difficult.
 
-The season split explains why. Chases succeeded **53.3%** of the time in the
-training seasons (2008–2017) but **57.3%** in the test seasons (2018–2019), so a
-model fitted on the earlier era carries its pessimism forward.
+Era drift is *not* the explanation. Chases succeeded 54.2% of the time in the
+training seasons and 55.5% in the held-out ones — barely over a point apart, far
+too small to account for the gap. The more likely cause is the model itself:
+logistic regression is linear in these features, and the real relationship in
+desperate situations is not, so it extrapolates too confidently towards zero.
 
-This is the point of a time-based split: a random split would have hidden the
-shift by mixing both eras into training.
+Isotonic calibration corrects most of it, which is why the calibrated Brier is
+the better number (0.1711 → 0.1597).
 
 ## Why the reported accuracy dropped
 
-An earlier version of this project reported **ROC-AUC ≈ 0.887**. It now reports
-**0.823**. Nothing about the model got worse — the earlier number was measured
-wrongly, and this is the correction.
+An earlier version of this project reported **ROC-AUC ≈ 0.887** on a random
+split. That number was measured wrongly, and the section below is the
+correction.
 
 The dataset has one row per ball. Splitting those rows at random puts balls from
 the *same match* on both sides of the split, and consecutive balls of a chase are
@@ -166,17 +168,21 @@ of the effect:
 
 | Split | ROC-AUC | What it measures |
 | --- | --- | --- |
-| Row-random (the leaky one) | 0.8872 | Balls from one match appear in train *and* test |
-| Match-grouped | 0.8416 | Whole matches held out, seasons mixed |
-| **Season-based (shipped)** | **0.8228** | Train 2008–2017, test 2018–2019 |
+| Row-random (the leaky one) | 0.8966 | Balls from one match appear in train *and* test |
+| Match-grouped | 0.8713 | Whole matches held out, seasons mixed |
+| **Season-based (shipped)** | **0.8637** | Train 2008–2023, test 2024–2026 |
 
 The season split is the one that matches how the model is actually used —
 predicting matches that had not happened when it was trained — so that is the
 number this project reports. `python src/train_model.py` prints all three.
 
-**The 6.4-point gap is the cost of the leak.** A model chosen or tuned against
-the 0.887 figure would have been optimised against a number that does not exist
-in deployment.
+**The 3.3-point gap is the cost of the leak.** A model chosen or tuned against
+the row-random figure would have been optimised against a number that does not
+exist in deployment.
+
+That gap used to be 6.4 points, on the smaller 2008–2019 dataset. It shrank
+because there is now roughly twice as much training data, and the more matches
+a model sees, the less it gains from memorising any one of them.
 
 ## Deployment
 
