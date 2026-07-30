@@ -38,6 +38,30 @@ DELIVERIES_OUT = os.path.join(DATA_DIR, "deliveries_all.csv.gz")
 # credited to the bowling side. Every other wicket_type costs a wicket.
 NON_DISMISSALS = {"retired hurt"}
 
+# Franchises that were renamed but are continuous entities. Collapsing these
+# keeps a single team history instead of splitting one side across two labels.
+#
+# Deliberately NOT included: Deccan Chargers, Gujarat Lions, Kochi Tuskers
+# Kerala and Pune Warriors. Those franchises were terminated rather than
+# renamed — Sunrisers Hyderabad and Gujarat Titans are separate entities that
+# later occupied the same cities — so they stay distinct. The one-hot encoder
+# handles the defunct labels, and the model is free to learn that they behaved
+# differently.
+TEAM_RENAMES = {
+    "Delhi Daredevils": "Delhi Capitals",                    # renamed 2019
+    "Kings XI Punjab": "Punjab Kings",                        # renamed 2021
+    "Royal Challengers Bangalore": "Royal Challengers Bengaluru",  # 2024
+    "Rising Pune Supergiants": "Rising Pune Supergiant",      # spelling, 2017
+}
+
+
+def normalise_teams(df, columns):
+    """Apply the franchise rename map to the given team-name columns."""
+    for column in columns:
+        if column in df.columns:
+            df[column] = df[column].replace(TEAM_RENAMES)
+    return df
+
 
 def download(url=CRICSHEET_URL, dest=ZIP_PATH, force=False):
     """Fetch the Cricsheet archive unless it is already cached."""
@@ -115,6 +139,7 @@ def build_matches(archive):
     # Season labels in the source are inconsistent ('2007/08', '2020/21'), but
     # each maps to exactly one calendar year, so derive it from the date.
     matches["season"] = matches["date"].dt.year
+    matches = normalise_teams(matches, ["team1", "team2", "winner"])
     return matches.sort_values("match_id").reset_index(drop=True)
 
 
@@ -147,7 +172,7 @@ def build_deliveries(archive):
         & ~df["wicket_type"].isin(NON_DISMISSALS)
     ).astype("int8")
 
-    return out
+    return normalise_teams(out, ["batting_team", "bowling_team"])
 
 
 def main():
