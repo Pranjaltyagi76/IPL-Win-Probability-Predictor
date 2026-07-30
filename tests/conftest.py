@@ -14,6 +14,7 @@ sys.path.insert(0, os.path.join(ROOT, "src"))
 
 from predict import load_model  # noqa: E402
 from feature_engineering import prepare_dataset  # noqa: E402
+from train_model import DEFAULT_MATCHES, DEFAULT_DELIVERIES  # noqa: E402
 
 
 @pytest.fixture(scope="session")
@@ -25,7 +26,4 @@ def pipe():
 @pytest.fixture(scope="session")
 def dataset():
     """The prepared, leakage-free training dataset."""
-    return prepare_dataset(
-        os.path.join(ROOT, "data", "matches.csv"),
-        os.path.join(ROOT, "data", "deliveries.csv"),
-    )
+    return prepare_dataset(DEFAULT_MATCHES, DEFAULT_DELIVERIES)
