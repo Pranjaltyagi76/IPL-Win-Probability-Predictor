@@ -5,6 +5,9 @@ __pycache__/
 # Trained model artifact — regenerated from data on first run
 pipe.pkl
 
+# Cached upstream archive — re-downloadable via src/build_dataset.py
+data/raw/
+
 # Virtual environments
 .venv/
 venv/
