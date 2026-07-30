@@ -23,7 +23,9 @@ from sklearn.metrics import roc_auc_score
 
 from feature_engineering import prepare_dataset, FEATURE_COLUMNS
 
-TEST_SEASON_START = 2018
+# The data now spans 19 seasons (2008-2026). Holding out from 2018 would put
+# half the dataset in test, so hold out the three most recent seasons instead.
+TEST_SEASON_START = 2024
 
 CATEGORICAL = ['batting_team', 'bowling_team', 'city']
 NUMERIC = ['runs_left', 'balls_left', 'wickets', 'target', 'crr', 'rrr']
