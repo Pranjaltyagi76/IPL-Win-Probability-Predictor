@@ -84,21 +84,31 @@ pytest -q                    # run the test suite
 
 ### Feature engineering
 
-`src/feature_engineering.py` merges the match and ball-by-ball tables, filters to
-all 15 franchises and non-DLS matches, and derives the match state at
-every delivery of the second innings:
+`src/feature_engineering.py` merges the match and ball-by-ball tables, keeps
+matches with an outright result and an unrevised target, and derives the match
+state at every delivery of the second innings:
 
 | Feature | Meaning |
 | --- | --- |
-| `runs_left` | Runs still required |
-| `balls_left` | Balls remaining in the innings |
+| `runs_left` | Runs still required to win |
+| `balls_left` | Legal deliveries remaining |
 | `wickets` | Wickets in hand |
-| `target` | First-innings run total |
+| `target` | Runs needed to win (first-innings total + 1) |
 | `crr` | Current run rate |
 | `rrr` | Required run rate |
 | `batting_team`, `bowling_team`, `city` | Categorical context |
 
 The label is whether the batting team went on to win.
+
+Two details that are easy to get wrong and matter here:
+
+- **Only legal deliveries count.** Wides and no-balls do not consume a ball, so
+  `balls_left` is driven by a legal-ball flag rather than the over number. The
+  naive `(over - 1) * 6 + ball` miscounts every over containing an extra.
+- **Only live states are kept.** A chase with the target reached, no balls left
+  or no wickets left is already decided. Those rows would teach the model to
+  restate certainties, so they are excluded from training and resolved by rules
+  at prediction time instead.
 
 ### Model
 
