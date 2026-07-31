@@ -117,6 +117,19 @@ scaling for the numeric ones, and logistic regression on top. The pipeline is
 serialised to `pipe.pkl`, which is generated rather than committed — the app
 trains it automatically on first run.
 
+### Explaining a prediction
+
+Because the model is linear, a prediction decomposes exactly: each feature's
+contribution is its coefficient times its encoded value. That is a faithful
+breakdown, not an approximation like a surrogate model would give.
+
+![Feature contributions for the lowest point of the featured chase](reports/explanation_featured.png)
+
+*The same 2024 match, at its lowest ebb. Needing 47 off 22, the model rates RCB
+at 19%: having only four wickets in hand and 22 balls left drags the estimate
+down hard, while the modest runs-required figure is the one thing in their
+favour. The app shows this panel for every manual prediction.*
+
 ## Results
 
 All figures below are on the season-based test set (2024–2026), produced by
