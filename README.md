@@ -21,7 +21,7 @@ line 17 times. This is the app's default view.*
 | **Task** | Win probability for the team batting second, at any ball of a chase |
 | **Data** | 1,243 IPL matches, 295,732 deliveries, 2008–2026 ([Cricsheet](https://cricsheet.org/)) |
 | **Model** | Logistic regression in a scikit-learn pipeline |
-| **Held-out score** | ROC-AUC **0.864**, Brier **0.160** on seasons 2024–2026 |
+| **Held-out score** | ROC-AUC **0.864**, Brier **0.171** (**0.160** calibrated) on seasons 2024–2026 |
 | **Test protocol** | Season-based split — no match appears in both train and test |
 | **Quality** | 20 tests, CI on every push, calibration reported alongside accuracy |
 
