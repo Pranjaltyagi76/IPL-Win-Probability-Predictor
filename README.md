@@ -14,6 +14,17 @@ the dataset. RCB sit on a knife edge for most of the innings, collapse to 19%
 after losing wickets in the 17th over, then win it. The curve crosses the 50%
 line 17 times. This is the app's default view.*
 
+### At a glance
+
+| | |
+| --- | --- |
+| **Task** | Win probability for the team batting second, at any ball of a chase |
+| **Data** | 1,243 IPL matches, 295,732 deliveries, 2008–2026 ([Cricsheet](https://cricsheet.org/)) |
+| **Model** | Logistic regression in a scikit-learn pipeline |
+| **Held-out score** | ROC-AUC **0.864**, Brier **0.160** on seasons 2024–2026 |
+| **Test protocol** | Season-based split — no match appears in both train and test |
+| **Quality** | 20 tests, CI on every push, calibration reported alongside accuracy |
+
 ---
 
 ## Contents
@@ -23,7 +34,7 @@ line 17 times. This is the app's default view.*
 - [Features](#features)
 - [How it works](#how-it-works)
 - [Results](#results)
-- [Why the reported accuracy dropped](#why-the-reported-accuracy-dropped)
+- [Data leakage: why the honest number is lower](#data-leakage-why-the-honest-number-is-lower)
 - [Limitations](#limitations)
 - [Deployment](#deployment)
 - [Project structure](#project-structure)
@@ -178,7 +189,7 @@ desperate situations is not, so it extrapolates too confidently towards zero.
 Isotonic calibration corrects most of it, which is why the calibrated Brier is
 the better number (0.1711 → 0.1597).
 
-## Why the reported accuracy dropped
+## Data leakage: why the honest number is lower
 
 An earlier version of this project reported **ROC-AUC ≈ 0.887** on a random
 split. That number was measured wrongly, and the section below is the
