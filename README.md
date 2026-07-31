@@ -49,13 +49,20 @@ line 17 times. This is the app's default view.*
 Given a live match state — teams, venue, target, runs scored, balls remaining and
 wickets in hand — the model returns the probability that the chasing side wins.
 
-Two things separate this from a standard "fit a classifier, show a number" project:
+Four things separate this from a standard "fit a classifier, show a number"
+project:
 
 1. **The evaluation is honest.** Splitting ball-by-ball rows at random leaks the
    same match into train and test and inflates the score. This project splits by
-   season instead, and reports the lower, deployment-realistic number.
-2. **Every prediction is explainable.** The app breaks each estimate into the
-   individual factors pushing the win probability up or down.
+   season instead, and reports the lower, deployment-realistic number — along
+   with the leaky number, so the gap is visible.
+2. **It is judged as a probability model.** Brier score and reliability diagrams
+   sit next to ROC-AUC, because a model that ranks chases well can still be
+   badly wrong about the numbers it prints.
+3. **Every prediction is explainable.** Each estimate decomposes exactly into
+   the factors pushing the win probability up or down.
+4. **The data is current and rebuildable.** It covers 2008–2026 from a source
+   that needs no credentials, and one command refreshes it after a new season.
 
 ## Quickstart
 
@@ -82,8 +89,9 @@ pytest -q                    # run the test suite
 
 ## Features
 
-- **Match replay** — pick any of 1,195 historical chases and see the win-probability
-  curve across the whole innings, annotated with wickets, fours and sixes.
+- **Match replay** — pick any of 1,195 completed chases and see the
+  win-probability curve across the whole innings, annotated with wickets, fours
+  and sixes, plus lead changes and the low point the chasing side recovered from.
 - **Manual prediction** — enter a hypothetical match state and get an estimate.
 - **Per-prediction explanations** — the top factors helping and hurting the
   batting team, as plain English plus a contribution chart.
@@ -335,5 +343,9 @@ python src/build_dataset.py --force-download
 ## Author
 
 **Pranjal Tyagi** — B.Tech CSE (AI & DS)
+GitHub: [@Pranjaltyagi76](https://github.com/Pranjaltyagi76)
+
+Data courtesy of [Cricsheet](https://cricsheet.org/), used under the Open Data
+Commons Attribution License.
 
 If this project was useful to you, consider giving it a ⭐
