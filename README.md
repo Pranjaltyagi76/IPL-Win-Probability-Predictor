@@ -24,6 +24,7 @@ line 17 times. This is the app's default view.*
 - [How it works](#how-it-works)
 - [Results](#results)
 - [Why the reported accuracy dropped](#why-the-reported-accuracy-dropped)
+- [Limitations](#limitations)
 - [Deployment](#deployment)
 - [Project structure](#project-structure)
 - [Tests and CI](#tests-and-ci)
@@ -209,6 +210,37 @@ exist in deployment.
 That gap used to be 6.4 points, on the smaller 2008–2019 dataset. It shrank
 because there is now roughly twice as much training data, and the more matches
 a model sees, the less it gains from memorising any one of them.
+
+## Limitations
+
+Things this model genuinely cannot do, and why:
+
+- **It does not know who is batting.** There are no player features at all, so
+  40 off 20 with Kohli set reads identically to 40 off 20 with the last
+  recognised batter gone. This is the single largest source of missing signal.
+- **Team identity is a blunt instrument.** "Chennai Super Kings" is one category
+  across 19 seasons, even though the 2010 and 2026 squads share almost nobody.
+  The model cannot express that a franchise was strong in one era and weak in
+  another.
+- **No conditions beyond the city.** Pitch behaviour, dew, and whether the
+  ground is a batting belter or a slow turner are all invisible to it.
+- **Rain-affected matches are out of scope.** DLS games are excluded from
+  training, so the model should not be trusted once a target has been revised.
+- **It is over-confident at the extremes.** As the calibration section shows,
+  it under-rates chasing teams in difficult positions. Isotonic calibration
+  helps, but the underlying linear form is the constraint.
+- **IPL only.** Nothing here is expected to transfer to another T20 league
+  without retraining.
+
+### What I would do next
+
+1. Add batter and bowler quality features — career strike rate and economy in
+   comparable match states. This is where the biggest gain almost certainly is.
+2. Replace the fixed team categories with a rolling measure of recent form, so
+   franchise strength can vary by season.
+3. Give the run-rate features a non-linear basis, or ship a calibrated gradient
+   booster, to fix the behaviour in desperate chases specifically.
+4. Weight recent seasons more heavily, since T20 scoring rates have moved.
 
 ## Deployment
 
